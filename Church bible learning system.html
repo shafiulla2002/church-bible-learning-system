@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Shepherd Academy – Bible Learning & Pastor Training</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#16204d;--ink2:#243073;--gold:#b8923a;--gold-s:#f3ead4;--bg:#f4f5fa;--card:#fff;--tx:#1a1f3a;--mut:#6b7090;--line:#e3e5f0;--ok:#2f7d6b;--okb:#dff1ec;--warn:#b7791f;--warnb:#fbefd5;--bad:#b4403f;--badb:#f8e0df;--info:#3a56b8;--infob:#e2e7fa;--r:14px;--sh:0 1px 2px rgba(22,32,77,.06),0 8px 24px -12px rgba(22,32,77,.18)}
+@media(prefers-color-scheme:dark){:root{--bg:#0e1230;--card:#171d45;--tx:#eceefb;--mut:#9aa0c8;--line:#262e63;--gold-s:#3a3220;--okb:#17372f;--warnb:#3b2f14;--badb:#3d1f22;--infob:#1f2a5e;--sh:0 8px 24px -12px rgba(0,0,0,.6)}}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{font-family:Figtree,system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--tx);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:Newsreader,Georgia,serif;font-weight:600;letter-spacing:-.01em;line-height:1.2}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.hide{display:none!important}
+/* login */
+.login{min-height:100%;display:grid;grid-template-columns:1.1fr 1fr}
+.hero{background:linear-gradient(160deg,var(--ink),var(--ink2));color:#fff;padding:56px 48px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;right:-90px;bottom:-90px;width:380px;height:380px;border:1px solid rgba(184,146,58,.4);border-radius:50%;box-shadow:0 0 0 40px rgba(184,146,58,.07),0 0 0 90px rgba(184,146,58,.04)}
+.hero h1{font-size:clamp(30px,4vw,48px);max-width:14ch;margin:28px 0 14px}
+.hero p{opacity:.8;max-width:42ch}
+.logo{display:flex;align-items:center;gap:10px;font-family:Newsreader,serif;font-size:20px;font-weight:600}
+.cross{width:34px;height:34px;border-radius:10px;background:var(--gold);display:grid;place-items:center;color:var(--ink);font-weight:700}
+.pick{padding:48px;display:flex;flex-direction:column;justify-content:center;gap:12px;max-width:520px;width:100%;margin:auto}
+.role{display:flex;gap:14px;align-items:center;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;transition:.15s;box-shadow:var(--sh)}
+.role:hover{border-color:var(--gold);transform:translateY(-1px)}
+.role i{font-style:normal;font-size:22px;width:44px;height:44px;border-radius:12px;background:var(--gold-s);display:grid;place-items:center}
+.role b{display:block}.role span{color:var(--mut);font-size:13px}
+/* shell */
+.app{display:grid;grid-template-columns:260px 1fr;min-height:100%}
+aside{background:var(--ink);color:#d9dcf5;padding:20px 14px;position:sticky;top:0;height:100vh;overflow:auto;display:flex;flex-direction:column;gap:4px}
+aside .logo{color:#fff;padding:4px 8px 18px}
+.nav{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;background:none;border:0;color:inherit;width:100%;text-align:left;font-weight:500}
+.nav:hover{background:rgba(255,255,255,.07)}
+.nav.on{background:var(--gold);color:var(--ink);font-weight:700}
+.nav[disabled]{opacity:.45;cursor:not-allowed}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 28px;border-bottom:1px solid var(--line);background:var(--card);position:sticky;top:0;z-index:5;padding-top:max(16px,env(safe-area-inset-top))}
+.top h2{font-size:22px}
+.who{display:flex;align-items:center;gap:10px}
+.av{width:36px;height:36px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:700;font-size:13px}
+.ghost{background:none;border:1px solid var(--line);border-radius:10px;padding:7px 12px}
+main{padding:28px;max-width:1200px;width:100%;margin:0 auto}
+.grid{display:grid;gap:16px}
+.k{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.two{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:var(--sh)}
+.card h3{font-size:18px;margin-bottom:12px}
+.kpi small{color:var(--mut);display:block}
+.kpi b{font-family:Newsreader,serif;font-size:32px;font-weight:600}
+.kpi em{font-style:normal;font-size:12px;color:var(--ok)}
+.badge{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:600;white-space:nowrap}
+.b-ok{background:var(--okb);color:var(--ok)}.b-warn{background:var(--warnb);color:var(--warn)}.b-bad{background:var(--badb);color:var(--bad)}.b-info{background:var(--infob);color:var(--info)}
+.tw{overflow-x:auto;margin:0 -6px}
+table{width:100%;border-collapse:collapse;min-width:520px}
+th{text-align:left;font-size:12px;color:var(--mut);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--line)}
+td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border:0}
+.btn{background:var(--ink);color:#fff;border:0;border-radius:10px;padding:9px 16px;font-weight:600}
+.btn.g{background:var(--gold);color:var(--ink)}
+.btn.s{padding:5px 11px;font-size:13px}
+.btn.o{background:none;color:var(--tx);border:1px solid var(--line)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.bars{display:flex;align-items:flex-end;gap:10px;height:150px;padding-top:10px}
+.bars div{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:6px;height:100%;font-size:12px;color:var(--mut)}
+.bars span{width:100%;max-width:38px;background:linear-gradient(var(--gold),#d9b866);border-radius:8px 8px 3px 3px}
+.prog{height:8px;border-radius:9px;background:var(--line);overflow:hidden}.prog i{display:block;height:100%;background:var(--ok);border-radius:9px}
+.item{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.item:last-child{border:0}.item small{color:var(--mut);display:block}
+.tl{list-style:none;padding:0;border-left:2px solid var(--line);margin-left:8px}
+.tl li{padding:0 0 16px 18px;position:relative}
+.tl li:before{content:"";position:absolute;left:-7px;top:5px;width:12px;height:12px;border-radius:50%;background:var(--line)}
+.tl li.d:before{background:var(--ok)}.tl li.c:before{background:var(--gold);box-shadow:0 0 0 4px var(--gold-s)}
+form{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+label{display:grid;gap:5px;font-size:13px;font-weight:600;color:var(--mut)}
+input,select,textarea{border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:10px 12px;font-weight:400;color:var(--tx)}
+.full{grid-column:1/-1}
+.err{color:var(--bad);font-size:12px;font-weight:500}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.seg button{border:0;background:none;padding:6px 10px;font-size:13px;font-weight:600;color:var(--mut)}
+.seg button.on{background:var(--ink);color:#fff}
+.seg button.on.P{background:var(--ok)}.seg button.on.A{background:var(--bad)}.seg button.on.L{background:var(--warn)}
+.empty{text-align:center;color:var(--mut);padding:28px}
+#toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 18px;border-radius:12px;box-shadow:var(--sh);z-index:50;max-width:90vw;transition:.2s}
+.bn,.more{display:none}
+@media(max-width:860px){
+.login{grid-template-columns:1fr}.hero{padding:32px 24px}.pick{padding:24px}
+.app{grid-template-columns:1fr}aside{display:none}
+.top{padding:12px 16px}.top h2{font-size:19px}main{padding:16px 16px 96px}
+.bn{display:flex;position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);padding:6px 6px max(6px,env(safe-area-inset-bottom));z-index:20;justify-content:space-around}
+.bn button{background:none;border:0;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;font-weight:600;color:var(--mut);padding:4px 8px;flex:1;border-radius:10px}
+.bn button span{font-size:20px}.bn button.on{color:var(--ink);background:var(--gold-s)}
+@media(prefers-color-scheme:dark){.bn button.on{color:var(--gold)}}
+.more{display:block;position:fixed;inset:0;background:rgba(10,14,40,.55);z-index:30}
+.more div{position:absolute;bottom:0;left:0;right:0;background:var(--card);border-radius:20px 20px 0 0;padding:16px 16px max(16px,env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.more button{background:var(--bg);border:0;border-radius:12px;padding:12px 4px;font-size:12px;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:4px}
+.more button span{font-size:22px}
+.who .nm{display:none}
+}
+html,body{min-height:100%}#root{min-height:100vh}
+.login{min-height:100vh}
+.hero{background:radial-gradient(800px 480px at 90% 0,rgba(184,146,58,.30),transparent 60%),radial-gradient(700px 520px at 0 100%,rgba(90,120,230,.45),transparent 60%),linear-gradient(160deg,#0c1338,#18235f 55%,#273788);padding:44px 56px;gap:28px;isolation:isolate}
+.hero:before{content:"";position:absolute;inset:0;z-index:-1;opacity:.5;background:repeating-linear-gradient(90deg,rgba(255,255,255,.04) 0 1px,transparent 1px 72px),radial-gradient(circle at 50% 120%,transparent 0 38%,rgba(184,146,58,.25) 38.4% 38.8%,transparent 39% 52%,rgba(184,146,58,.15) 52.3% 52.6%,transparent 53%)}
+.hero:after{display:none}
+.hero h1{font-size:clamp(34px,4.4vw,56px);max-width:12ch;margin:0 0 16px;line-height:1.05}
+.hero p{font-size:17px;max-width:44ch}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.chips span{border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.07);padding:6px 13px;border-radius:99px;font-size:13px;font-weight:500}
+.glass{background:rgba(255,255,255,.1);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.22);border-radius:20px;padding:18px;max-width:390px;display:grid;gap:10px;box-shadow:0 24px 48px -24px rgba(0,0,0,.5)}
+.glass small{opacity:.75}.glass b{font-family:Newsreader,Georgia,serif;font-size:20px;font-weight:600}
+.glass .prog{background:rgba(255,255,255,.2)}.glass .prog i{background:var(--gold)}
+.ft{opacity:.65}
+.pick{padding:48px 44px;max-width:500px;gap:12px}
+.pick h2{font-size:32px}
+.role{position:relative;padding:16px 18px;border-radius:16px}
+.role:after{content:"›";position:absolute;right:18px;font-size:24px;color:var(--mut);transition:.15s}
+.role:hover:after{transform:translateX(4px);color:var(--c)}
+.role i{background:color-mix(in srgb,var(--c) 16%,transparent);color:var(--c)}
+.role:hover{border-color:var(--c)}
+.note{color:var(--mut);font-size:13px}
+.top{backdrop-filter:blur(10px);background:color-mix(in srgb,var(--card) 88%,transparent)}
+.nav span{width:28px;height:28px;display:grid;place-items:center;background:rgba(255,255,255,.08);border-radius:8px;font-size:14px;flex:none}
+.nav.on span{background:rgba(22,32,77,.15)}
+.card{transition:box-shadow .15s,transform .15s}
+.bell{position:relative}.dotn{position:absolute;top:-6px;right:-6px;background:var(--bad);color:#fff;border-radius:99px;font-size:11px;min-width:18px;height:18px;display:grid;place-items:center;font-weight:700}
+.calw{display:grid;grid-template-columns:1.5fr 1fr;gap:16px;align-items:start}
+.ch{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}
+.wd,.cg{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.wd span{text-align:center;font-size:12px;font-weight:600;color:var(--mut);padding:4px}
+.day{min-height:88px;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:6px;text-align:left;display:flex;flex-direction:column;gap:3px;overflow:hidden;transition:.12s}
+.day:hover{border-color:var(--gold)}
+.day b{font-size:13px;width:24px;height:24px;display:grid;place-items:center}
+.day.today b{background:var(--gold);color:var(--ink);border-radius:50%}
+.day.sel{border-color:var(--ink2);box-shadow:inset 0 0 0 2px var(--ink2);background:var(--infob)}
+.dots{display:none;gap:3px}
+.dots i,.lg i{width:7px;height:7px;border-radius:50%;background:var(--info);display:inline-block}
+.dots i.interview,.lg i.interview{background:var(--gold)}.dots i.exam,.lg i.exam{background:var(--bad)}.dots i.x,.lg i.x{background:var(--mut)}
+.chip{font-style:normal;font-size:11px;padding:1px 6px;border-radius:6px;background:var(--infob);color:var(--info);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chip.interview{background:var(--gold-s);color:var(--warn)}.chip.exam{background:var(--badb);color:var(--bad)}
+.more2{color:var(--mut);font-size:11px}
+.lg{margin-top:14px;gap:16px;font-size:12px;color:var(--mut)}.lg i{margin-right:5px}
+.slot{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}.slot:last-child{border:0}
+.slot .tm{min-width:76px}.slot .tm b{display:block}.slot .tm small{color:var(--mut)}
+.slot .bd{border-left:3px solid var(--info);padding-left:12px;flex:1}
+.slot.interview .bd{border-color:var(--gold)}.slot.exam .bd{border-color:var(--bad)}
+.ov{position:fixed;inset:0;background:rgba(10,14,40,.55);display:grid;place-items:center;z-index:40;padding:16px}
+.dlg{background:var(--card);border-radius:18px;padding:22px;max-width:520px;width:100%;max-height:90vh;overflow:auto;box-shadow:var(--sh)}
+.dlg h3{margin-bottom:14px}
+details{border-bottom:1px solid var(--line);padding:10px 0}summary{cursor:pointer;font-weight:600}
+.sw{display:flex;align-items:center;gap:8px;font-weight:500;color:var(--tx)}
+@media(max-width:860px){
+.hero{padding:28px 22px;gap:18px}.hero h1{font-size:34px}.hero p{font-size:15px}.glass{display:none}.pick{padding:24px 20px 40px}
+.calw{grid-template-columns:1fr}.day{min-height:50px;align-items:center;padding:4px}.chip,.more2{display:none}.dots{display:flex}.cg,.wd{gap:3px}
+.more div{max-height:70vh;overflow:auto}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<div id="toast" class="hide" role="status" aria-live="polite"></div>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+/* ---------- in-memory demo data (a real build loads this from the API) ---------- */
+const S={role:null,view:'dashboard',more:false,stStatus:2,
+apps:[{id:'A-101',n:'Daniel Joseph',t:'Student',c:'3-Month Bible Foundation',s:'Submitted'},
+{id:'A-102',n:'Pr. Samuel Raj',t:'Pastor',c:'6-Month Ministry Development',s:'Interview Scheduled'},
+{id:'A-103',n:'Ruth Mercy',t:'Student',c:'6-Month Bible Studies',s:'Interview Passed'},
+{id:'A-104',n:'Pr. Abel Kumar',t:'Pastor',c:'3-Month Pastor Training',s:'Documents Required'},
+{id:'A-105',n:'Esther Priya',t:'Student',c:'Individual Mentoring',s:'Final Approval Pending'}],
+courses:[['3-Month Bible Foundation','Student','12 wks',24,'₹3,000','Active'],['6-Month Bible Studies','Student','24 wks',48,'₹5,500','Active'],['3-Month Pastor Training','Pastor','12 wks',24,'₹4,000','Active'],['6-Month Ministry Development','Pastor','24 wks',48,'₹7,500','Active'],['Individual Mentoring','Both','Custom',16,'₹900 / mo','Inactive']],
+batches:[['BF-01','3-Month Bible Foundation','Pr. John Mathew','Mon & Wed 7:00 PM',18,25],['BS-02','6-Month Bible Studies','Pr. Grace David','Sat 10:00 AM',22,25],['PT-01','3-Month Pastor Training','Dr. Peter Isaac','Tue & Thu 6:30 AM',14,20]],
+sessions:[{id:1,t:'Genesis: Creation & Covenant',b:'BF-01',w:'Today, 7:00 PM',d:60,meet:true},{id:2,t:'Gospel of John, ch. 1–3',b:'BS-02',w:'Sat, 10:00 AM',d:75,meet:true},{id:3,t:'Pastoral Care Basics',b:'PT-01',w:'Tue, 6:30 AM',d:60,meet:false}],
+people:['Daniel Joseph','Ruth Mercy','Esther Priya','Samuel Paul','Naomi Grace','Joel Ravi'],
+att:{},saved:false};
+const NAV={
+admin:[['dashboard','🏛️','Dashboard'],['churches','⛪','Churches'],['users','🔑','User Management'],['students','🎓','Students'],['pastors','✝️','Pastors'],['techteam','🛡️','Technical Team'],['applications','📝','Applications'],['interviews','🎤','Interviews'],['courses','📖','Courses'],['batches','👥','Batches'],['calendar','📅','Class Calendar'],['meet','🎥','Google Meet'],['attendance','✅','Attendance'],['plans','🏷️','Subscription Plans'],['payments','💳','Payments'],['exams','🧪','Assignments & Exams'],['materials','📚','Study Materials'],['certs','🏅','Certificates'],['notify','🔔','Notifications'],['reports','📊','Reports'],['support','🛟','Support'],['audit','🗒️','Audit Logs'],['roles','🔐','Roles & Permissions'],['settings','⚙️','Settings']],
+tech:[['dashboard','🏛️','Dashboard'],['applications','📝','Applications'],['docs','📎','Document Verification'],['interviews','🎤','Interviews'],['calendar','📅','Interview Calendar'],['assess','🧮','Assessments'],['results','🏁','Interview Results'],['approved','✔️','Approved'],['rejected','⏸️','Rejected / Deferred'],['history','🕘','History'],['notify','🔔','Notifications'],['profile','🙍','Profile']],
+pastor:[['dashboard','🏛️','Dashboard'],['profile','🙍','My Profile'],['courses','📖','Training Courses'],['students','🎓','My Students'],['batches','👥','My Batches'],['calendar','📅','Class Calendar'],['meet','🎥','Google Meet'],['attendance','✅','Attendance'],['materials','📚','Materials'],['lessons','🗒️','Lesson Plans'],['assign','🗂️','Assignments'],['exams','🧪','Examinations'],['progress','📈','Student Progress'],['feedback','💬','Feedback'],['history','🕘','Class History'],['notify','🔔','Notifications'],['certs','🏅','Certificates'],['support','🛟','Support'],['settings','⚙️','Settings']],
+student:[['dashboard','🏛️','Dashboard'],['profile','🙍','My Profile'],['register','🧾','My Registration'],['status','🧭','Application Status'],['interviewsch','🎤','Interview Schedule'],['courses','📖','My Courses'],['batches','👥','My Batches'],['calendar','📅','Class Calendar'],['meet','🎥','Join Google Meet'],['attendance','✅','Attendance'],['materials','📚','Study Materials'],['lessons','🗒️','Lessons'],['assign','🗂️','Assignments'],['exams','🧪','Examinations'],['results','🏁','My Results'],['progress','📈','Progress'],['certs','🏅','Certificates'],['payments','💳','Payments'],['notify','🔔','Notifications'],['support','🛟','Support'],['settings','⚙️','Settings']]};
+const BNP={admin:['dashboard','applications','calendar','attendance'],tech:['dashboard','applications','interviews','calendar'],pastor:['dashboard','calendar','attendance','students'],student:['dashboard','calendar','attendance','materials']};
+const OPEN=['dashboard','profile','register','status','interviewsch','payments','notify','support','settings'];
+const ROLES={admin:['Super Admin','Whole platform','👑','Admin User','AU'],tech:['Technical Team','Applications & interviews','🛡️','Tech Reviewer','TR'],pastor:['Pastor / Instructor','Teach and train','✝️','Pr. John Mathew','JM'],student:['Student','Learn and track progress','📖','Daniel Joseph','DJ']};
+const locked=v=>S.role==='student'&&S.stStatus<2&&!OPEN.includes(v);
+const badge=s=>`<span class="badge ${/Passed|Approved|Enrolled|Active|Paid|Present|Completed|Verified|Good|Resolved/.test(s)?'b-ok':/Required|Pending|Submitted|Inactive|Today|Open/.test(s)?'b-warn':/Fail|Reject|Absent|Cancel|Low/.test(s)?'b-bad':'b-info'}">${esc(s)}</span>`;
+const kpi=(l,v,n='')=>`<div class="card kpi"><small>${l}</small><b>${v}</b> <em>${n}</em></div>`;
+const table=(h,r)=>`<div class="tw"><table><thead><tr>${h.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>${r.length?r.map(x=>`<tr>${x.map(c=>`<td>${c}</td>`).join('')}</tr>`).join(''):`<tr><td colspan="${h.length}" class="empty">Nothing here yet.</td></tr>`}</tbody></table></div>`;
+const bars=(d,l)=>{const m=Math.max(...d);return `<div class="bars">${d.map((v,i)=>`<div>${v}<span style="height:${v/m*100}%"></span>${l[i]}</div>`).join('')}</div>`};
+const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.remove('hide');clearTimeout(toast.x);toast.x=setTimeout(()=>t.classList.add('hide'),2600)};
+const pct=()=>{const v=Object.values(S.att);if(!v.length)return null;const ex=v.filter(x=>x==='E').length,den=v.length-ex;return den?Math.round(v.filter(x=>x==='P'||x==='L').length/den*100):null};
+/* ---------- views ---------- */
+const V={
+dashboard(){
+ const r=S.role,m=S.apps;
+ if(r==='student')return `<div class="card" style="background:linear-gradient(135deg,var(--ink),var(--ink2));color:#fff"><h2 style="font-size:26px">Peace be with you, Daniel</h2><p style="opacity:.8;margin:6px 0 14px">3-Month Bible Foundation · Batch BF-01</p><div class="prog"><i style="width:58%"></i></div><small style="opacity:.8">58% of the course complete</small></div>
+ <div class="grid k" style="margin:16px 0">${kpi('Attendance',(pct()??92)+'%','this month')}${kpi('Pending assignments',2)}${kpi('Next exam','12 Nov')}${kpi('Subscription','Active','ends 14 Dec')}</div>
+ <div class="grid two"><div class="card"><h3>Next class</h3>${V.sessionList(S.sessions.slice(0,1))}</div><div class="card"><h3>Announcements</h3><div class="item"><div>Class moves to 7:30 PM on Friday<small>Batch BF-01 · 2 days ago</small></div></div><div class="item"><div>New study notes: Covenant in Genesis<small>Materials · 4 days ago</small></div></div></div></div>`;
+ if(r==='pastor')return `<div class="grid k">${kpi('Assigned students',54)}${kpi('Active batches',3)}${kpi('Classes this week',6)}${kpi('Attendance to submit',1,'pending')}${kpi('To evaluate',9,'assignments')}</div>
+ <div class="grid two" style="margin-top:16px"><div class="card"><h3>Upcoming classes</h3>${V.sessionList(S.sessions)}</div><div class="card"><h3>Attendance by week</h3>${bars([88,91,84,93,90],['W1','W2','W3','W4','W5'])}</div></div>`;
+ const t=r==='tech';
+ return `<div class="grid k">${t?kpi('New applications',m.filter(a=>a.s==='Submitted').length)+kpi('Interviews today',3)+kpi('Awaiting results',4)+kpi('Docs pending',2):kpi('Students',412,'+18 this month')+kpi('Pastors',67,'+4')+kpi('Pending registrations',m.filter(a=>a.s==='Submitted').length)+kpi('Interviews scheduled',9)+kpi('Active batches',batchesN())+kpi('Attendance rate','89%')+kpi('Active subscriptions',366)+kpi('Revenue (Oct)','₹4.8L','₹36k due')}</div>
+ <div class="grid two" style="margin-top:16px"><div class="card"><h3>Registrations</h3>${bars([42,55,61,48,72,80],['May','Jun','Jul','Aug','Sep','Oct'])}</div><div class="card"><h3>${t?'Today’s interviews':'Needs your attention'}</h3>${m.slice(0,4).map(a=>`<div class="item"><div><b>${esc(a.n)}</b><small>${a.t} · ${esc(a.c)}</small></div>${badge(a.s)}</div>`).join('')}</div></div>`},
+sessionList(l){return l.map(s=>`<div class="item"><div><b>${esc(s.t)}</b><small>${s.w} · ${s.d} min · Batch ${s.b}</small></div>${s.meet?`<button class="btn g s" onclick="toast('Opens the Google Meet link stored on this session')">Join class</button>`:`<span class="badge b-warn">Link pending</span>`}</div>`).join('')},
+applications(){
+ const adm=S.role==='admin';
+ return `<div class="card"><h3>Registration applications</h3>${table(['ID','Applicant','Type','Program','Status','Action'],S.apps.map(a=>[a.id,`<b>${esc(a.n)}</b>`,a.t,esc(a.c),badge(a.s),
+ a.s==='Final Approval Pending'&&adm?`<button class="btn s" onclick="setApp('${a.id}','Approved')">Approve</button> <button class="btn o s" onclick="setApp('${a.id}','Rejected')">Reject</button>`:
+ a.s==='Submitted'?`<button class="btn s" onclick="intModal('${a.id}')">Schedule interview</button>`:
+ a.s==='Interview Scheduled'?`<button class="btn s" onclick="setApp('${a.id}','Interview Passed')">Mark passed</button> <button class="btn o s" onclick="setApp('${a.id}','Interview Failed')">Fail</button>`:
+ a.s==='Interview Passed'?`<button class="btn s" onclick="setApp('${a.id}','Final Approval Pending')">Send to admin</button>`:'—']))}</div>`},
+interviews(){return `<div class="card"><h3>Interview calendar</h3>${table(['When','Candidate','Stage','Interviewer','Mode'],[['Today 4:00 PM','Pr. Samuel Raj','Final review','Dr. Peter Isaac','Online'],['Tomorrow 11:00 AM','Daniel Joseph','Initial screening','Tech Reviewer','Online'],['Thu 2:30 PM','Ruth Mercy','Technical assessment','Tech Reviewer','Offline']])}<p style="color:var(--mut);margin-top:10px;font-size:13px">Internal notes are visible to authorised team members only, never to applicants.</p></div>`},
+results(){return V.applications()},
+history(){return `<div class="card"><h3>Decision history</h3>${table(['Date','Candidate','Decision','By'],[['18 Oct','Ruth Mercy','Interview Passed','Tech Reviewer'],['16 Oct','Abel Kumar','Documents requested','Tech Reviewer'],['12 Oct','Mary Selvi','Rejected','Admin User']])}</div>`},
+courses(){return `<div class="card"><h3>Courses & programs</h3>${table(['Course','Audience','Duration','Lessons','Fee','Status'],S.courses.map(c=>[`<b>${c[0]}</b>`,c[1],c[2],c[3],c[4],badge(c[5])]))}</div>`},
+batches(){return `<div class="grid two">${S.batches.map(b=>`<div class="card"><h3>${b[1]}</h3><p style="color:var(--mut)">${b[0]} · ${b[2]}<br>${b[3]}</p><div class="prog" style="margin:12px 0 6px"><i style="width:${b[4]/b[5]*100}%"></i></div><small style="color:var(--mut)">${b[4]} of ${b[5]} seats filled · ${b[5]-b[4]} available</small></div>`).join('')}</div>`},
+schedule(){return `<div class="card"><div class="row" style="justify-content:space-between"><h3>Class sessions</h3>${S.role!=='student'?`<button class="btn g s" onclick="toast('A session is marked ready only after Google Calendar returns a Meet link')">New session</button>`:''}</div>${V.sessionList(S.sessions)}<p style="color:var(--mut);font-size:13px;margin-top:10px">Times appear in your local time zone. Cancelled classes never count as absences.</p></div>`},
+attendance(){
+ if(S.role==='student')return `<div class="grid k">${kpi('Attendance',(pct()??92)+'%')}${kpi('Classes held',24)}${kpi('Absences',2)}</div><div class="card" style="margin-top:16px"><h3>Recent classes</h3>${table(['Date','Class','Status'],[['Mon 14 Oct','Genesis 3',badge('Present')],['Wed 16 Oct','Genesis 4',badge('Late')],['Mon 21 Oct','Genesis 5',badge('Absent')]])}</div>`;
+ const rows=S.people.map(p=>`<div class="item"><b>${p}</b><div class="seg" role="group" aria-label="Attendance for ${p}">${[['P','Present'],['L','Late'],['A','Absent'],['E','Excused']].map(([k,l])=>`<button class="${k} ${S.att[p]===k?'on':''}" onclick="mark('${p}','${k}')">${l}</button>`).join('')}</div></div>`).join('');
+ const p=pct();
+ return `<div class="card"><div class="row" style="justify-content:space-between"><div><h3>Genesis: Creation & Covenant</h3><small style="color:var(--mut)">Batch BF-01 · Today, 7:00 PM</small></div>${S.saved?badge('Submitted'):badge('Pending')}</div>
+ <div style="margin:10px 0">${rows}</div><div class="row" style="justify-content:space-between"><span>Session attendance: <b>${p===null?'—':p+'%'}</b> <small style="color:var(--mut)">(Present + Late) ÷ (marked − Excused)</small></span><button class="btn" ${Object.keys(S.att).length<S.people.length||S.saved?'disabled':''} onclick="S.saved=true;toast('Attendance submitted for admin review');go()">Submit attendance</button></div></div>`},
+payments(){return `<div class="card"><h3>${S.role==='student'?'Subscription & payments':'Payments & transactions'}</h3>${table(['Ref','Item','Amount','Date','Status'],[['TX-8841','3-Month Student Plan','₹3,000','02 Oct',badge('Paid')],['TX-8790','Registration fee','₹500','24 Sep',badge('Paid')],['TX-8902','Installment 2 of 2','₹1,500','14 Nov',badge('Pending')]])}<p style="color:var(--mut);margin-top:10px;font-size:13px">Payment alone never approves an applicant who still needs interview approval.</p></div>`},
+reports(){return `<div class="grid two"><div class="card"><h3>Course enrollment</h3>${bars([124,96,64,38,22],['3M','6M','Pastor','Adv','Indiv'])}</div><div class="card"><h3>Revenue (₹ thousands)</h3>${bars([310,350,390,420,455,480],['May','Jun','Jul','Aug','Sep','Oct'])}</div></div><div class="row" style="margin-top:16px"><button class="btn o" onclick="toast('CSV export needs the backend reports API')">Export CSV</button><button class="btn o" onclick="window.print()">Print report</button></div>`},
+materials(){return `<div class="card"><h3>Bible study materials</h3>${['Genesis 1–11 study notes (PDF)','Covenant themes – audio lesson','Gospel of John outline (PDF)','Scripture memory plan'].map(m=>`<div class="item"><div>${m}<small>Enrolled course content only</small></div><button class="btn o s" onclick="toast('Opens the file from private storage')">Open</button></div>`).join('')}</div>`},
+assign(){return `<div class="card"><h3>Assignments</h3>${table(['Assignment','Due','Status'],[['Reflection on Genesis 1','25 Oct',badge('Submitted')],['Memory verse: Psalm 23','30 Oct',badge('Pending')],['Covenant timeline','06 Nov',badge('Pending')]])}</div>`},
+certs(){return `<div class="card empty">Your first certificate appears here once you meet the completion criteria.<br><br><button class="btn o" onclick="toast('Each certificate carries a unique verification ID')">How verification works</button></div>`},
+register(){return `<div class="card"><h3>Student registration</h3><form onsubmit="reg(event)" novalidate>
+ <label>Full name<input name="n" required autocomplete="name"><span class="err"></span></label>
+ <label>Email<input name="e" type="email" required autocomplete="email"><span class="err"></span></label>
+ <label>Mobile (with country code)<input name="m" type="tel" placeholder="+91" required><span class="err"></span></label>
+ <label>Church / organization<input name="c"></label>
+ <label>Program<select name="p">${S.courses.filter(c=>c[1]!=='Pastor').map(c=>`<option>${c[0]}</option>`).join('')}</select></label>
+ <label>Class format<select><option>Batch</option><option>Individual</option></select></label>
+ <label>Preferred language<select><option>English</option><option>Telugu</option><option>Hindi</option></select></label>
+ <label>Available times<input placeholder="e.g. weekday evenings"></label>
+ <label class="full"><span><input type="checkbox" name="t" style="margin-right:8px">I accept the terms and privacy policy</span><span class="err"></span></label>
+ <div class="full"><button class="btn g">Submit application</button></div></form></div>`},
+status(){const st=['Submitted','Under Review','Enrolled'],steps=[['Application submitted','Received 10 Oct'],['Interview','Passed 18 Oct'],['Admin approval & enrollment','Batch BF-01 assigned']];
+ return `<div class="card"><h3>Your application</h3><ul class="tl">${steps.map((s,i)=>`<li class="${i<S.stStatus?'d':i===S.stStatus?'c':''}"><b>${s[0]}</b><br><small style="color:var(--mut)">${i<=S.stStatus?s[1]:'Upcoming'}</small></li>`).join('')}</ul>
+ <p style="color:var(--mut);font-size:13px">Before approval you can only reach registration, status, interviews, notifications and support. Demo control:</p>
+ <div class="row" style="margin-top:8px">${[0,1,2].map(i=>`<button class="btn s ${S.stStatus===i?'':'o'}" onclick="S.stStatus=${i};go()">${['Submitted','Interview stage','Enrolled'][i]}</button>`).join('')}</div></div>`}
+};
+const batchesN=()=>S.batches.length;
+/* ---------- actions ---------- */
+function setApp(id,s){S.apps.find(a=>a.id===id).s=s;toast(`${id} moved to “${s}”`);go()}
+function mark(p,k){S.att[p]=k;S.saved=false;go()}
+function reg(e){e.preventDefault();const f=e.target;let ok=true;
+ [['n',v=>v.trim().length>1,'Enter your full name'],['e',v=>/^\S+@\S+\.\S+$/.test(v),'Enter a valid email address'],['m',v=>/^\+\d[\d\s-]{7,}$/.test(v),'Start with a country code, e.g. +91']].forEach(([k,t,m])=>{const el=f[k],bad=!t(el.value);el.nextElementSibling.textContent=bad?m:'';ok=ok&&!bad});
+ const c=f.t;c.parentElement.nextElementSibling.textContent=c.checked?'':'Accept the terms to continue';ok=ok&&c.checked;
+ if(!ok)return;S.apps.unshift({id:'A-'+(100+S.apps.length+1),n:f.n.value,t:'Student',c:f.p.value,s:'Submitted'});toast('Application submitted. We will email you the next step.');S.view='status';go()}
+function login(r){S.role=r;S.view='dashboard';go()}
+function logout(){S.role=null;go()}
+function nav(v){if(locked(v)){toast('Unlocks after your enrollment is approved');return}S.view=v;S.more=false;go();scrollTo(0,0)}
+/* ---------- shell ---------- */
+function go(){
+ const root=$('#root');
+ if(!S.role){root.innerHTML=`<div class="login"><section class="hero"><div class="logo"><span class="cross">✝</span>Shepherd Academy</div>
+<div><h1>Learn Scripture.<br>Train to serve.</h1><p>One place for Bible classes, pastor training, interviews, attendance, payments and certificates.</p><div class="chips"><span>Live Google Meet classes</span><span>Smart attendance</span><span>Interview workflow</span><span>Verified certificates</span></div></div>
+<div class="glass"><small>Today · Batch BF-01</small><b>Genesis: Creation &amp; Covenant</b><div class="row" style="justify-content:space-between"><span>7:00 PM · 60 min</span><span class="badge b-ok">Link ready</span></div><div class="prog"><i style="width:58%"></i></div><small>Course progress 58%</small></div>
+<small class="ft">Front-end demo with sample data</small></section>
+<section class="pick"><div><h2>Welcome back</h2><p class="note" style="margin:6px 0 14px">Choose a portal to continue.</p></div>${Object.entries(ROLES).map(([k,r])=>`<button class="role" style="--c:${{admin:'#b8923a',tech:'#3a56b8',pastor:'#7a4fb8',student:'#2f7d6b'}[k]}" onclick="login('${k}')"><i>${r[2]}</i><div><b>${r[0]}</b><span>${r[1]}</span></div></button>`).join('')}<p class="note" style="margin-top:10px">Demo mode: no password needed. Each portal shows only what its role may see.</p></section></div>`;return}
+
+ const r=ROLES[S.role],items=NAV[S.role],cur=items.find(i=>i[0]===S.view)||items[0],body=(V[cur[0]]||V.dashboard)();
+ const side=items.map(i=>`<button class="nav ${i[0]===cur[0]?'on':''}" ${locked(i[0])?'disabled':''} onclick="nav('${i[0]}')"><span>${i[1]}</span>${i[2]}${locked(i[0])?' 🔒':''}</button>`).join('');
+ const pre=S.role==='student'&&S.stStatus<2?['dashboard','register','status','payments']:BNP[S.role],bn=items.filter(i=>pre.includes(i[0])),rest=items.filter(i=>!pre.includes(i[0]));
+ root.innerHTML=`<div class="app"><aside><div class="logo"><span class="cross">✝</span>Shepherd Academy</div>${side}<button class="nav" style="margin-top:auto" onclick="logout()"><span>↩️</span>Switch portal / Logout</button></aside>
+ <div><header class="top"><h2>${cur[2]}</h2><div class="who"><button class="ghost bell" onclick="nav('notify')" aria-label="Notifications">🔔${S.notes.some(n=>!n.r)?`<span class="dotn">${S.notes.filter(n=>!n.r).length}</span>`:''}</button><span class="nm"><b>${r[3]}</b> <small style="color:var(--mut)">${r[0]}</small></span><div class="av">${r[4]}</div><button class="ghost" onclick="logout()" aria-label="Log out">Log out</button></div></header><main>${body}</main></div></div>
+ <nav class="bn" aria-label="Primary">${bn.map(i=>`<button class="${i[0]===cur[0]?'on':''}" onclick="nav('${i[0]}')"><span>${i[1]}</span>${i[2].split(' ').slice(-1)[0]}</button>`).join('')}${rest.length?`<button onclick="S.more=true;go()"><span>⋯</span>More</button>`:''}</nav>
+ ${S.more?`<div class="more" onclick="S.more=false;go()"><div onclick="event.stopPropagation()">${rest.map(i=>`<button onclick="nav('${i[0]}')"><span>${i[1]}</span>${i[2]}${locked(i[0])?' 🔒':''}</button>`).join('')}</div></div>`:''}`;
+}
+/* ===== calendar, modals and remaining modules ===== */
+const pad=n=>String(n).padStart(2,'0'),ds=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const TODAY=new Date();TODAY.setHours(0,0,0,0);
+const addD=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+const mins=t=>{const a=t.split(':');return +a[0]*60+ +a[1]};
+const tfmt=t=>{const a=t.split(':').map(Number);return (a[0]%12||12)+':'+pad(a[1])+(a[0]>=12?' PM':' AM')};
+const endT=(s,d)=>{const m=mins(s)+d;return pad(Math.floor(m/60)%24)+':'+pad(m%60)};
+const MN=['January','February','March','April','May','June','July','August','September','October','November','December'],DN=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const INS={'BF-01':'Pr. John Mathew','BS-02':'Pr. Grace David','PT-01':'Dr. Peter Isaac'};
+const RULES=[{b:'BF-01',t:'Genesis: Creation & Covenant',w:[1,3],s:'19:00',d:60},{b:'BS-02',t:'Gospel of John, ch. 1–3',w:[6],s:'10:00',d:75},{b:'PT-01',t:'Pastoral Care Basics',w:[2,4],s:'06:30',d:60}];
+const W0=ds(addD(TODAY,-44)),W1=ds(addD(TODAY,70));
+Object.assign(S,{cal:{y:TODAY.getFullYear(),m:TODAY.getMonth(),sel:ds(TODAY)},extra:[],meetOk:{},cancel:[ds(addD(TODAY,8))],f:'All',thr:75,
+ints:[{id:'I1',date:ds(TODAY),s:'16:00',n:'Pr. Samuel Raj',st:'Final review',by:'Dr. Peter Isaac',mode:'Online'},{id:'I2',date:ds(addD(TODAY,1)),s:'11:00',n:'Daniel Joseph',st:'Initial screening',by:'Tech Reviewer',mode:'Online'},{id:'I3',date:ds(addD(TODAY,2)),s:'14:30',n:'Ruth Mercy',st:'Technical assessment',by:'Tech Reviewer',mode:'Offline'}],
+notes:[{t:'Class today: Genesis: Creation & Covenant at 7:00 PM',w:'1 h ago',r:0},{t:'Assignment due soon: Memory verse (Psalm 23)',w:'Yesterday',r:0},{t:'Payment received for 3-Month Student Plan',w:'2 days ago',r:1},{t:'Your attendance for last week was recorded',w:'3 days ago',r:1}],
+audit:[['18 Oct, 4:10 PM','Admin User','Approved enrollment A-099'],['17 Oct, 11:32 AM','Tech Reviewer','Requested documents for A-104'],['15 Oct, 9:05 AM','Admin User','Changed attendance threshold to 75%']],
+tickets:[['T-31','Cannot see Genesis notes','Open'],['T-27','Invoice for October','Resolved']]});
+const ST=[['Daniel Joseph','BF-01',92],['Ruth Mercy','BS-02',88],['Esther Priya','BF-01',71],['Samuel Paul','BS-02',64],['Naomi Grace','BF-01',95],['Joel Ravi','PT-01',78]];
+const vis=e=>S.role==='admin'||(S.role==='tech'?e.k==='interview':e.k!=='interview'&&(S.role==='pastor'?['BF-01','PT-01'].includes(e.b):e.b==='BF-01'));
+function evs(key){const w=new Date(key+'T00:00:00').getDay(),o=[];
+ if(key>=W0&&key<=W1)RULES.forEach(r=>{if(r.w.includes(w))o.push({k:'class',id:r.b+key,b:r.b,t:r.t,s:r.s,d:r.d,i:INS[r.b],cancel:S.cancel.includes(key)&&r.b==='BF-01',meet:r.b!=='PT-01'})});
+ S.extra.filter(e=>e.date===key).forEach(e=>o.push(Object.assign({k:'class'},e)));
+ S.ints.filter(e=>e.date===key).forEach(e=>o.push({k:'interview',id:e.id,t:'Interview: '+e.n,b:'—',s:e.s,d:30,i:e.by,meet:e.mode==='Online',mode:e.mode,sub:e.st}));
+ if(key===ds(addD(TODAY,23)))o.push({k:'exam',id:'EX1',t:'Bible Foundation Mid-Term Exam',b:'BF-01',s:'18:00',d:90,i:'Pr. John Mathew',meet:true});
+ o.forEach(x=>{if(S.meetOk[x.id])x.meet=true});
+ return o.filter(vis).sort((a,b)=>mins(a.s)-mins(b.s))}
+function slotHtml(x,key){const st=x.cancel?'Cancelled':key<ds(TODAY)?'Completed':key===ds(TODAY)?'Today':'Upcoming',mg=S.role==='admin'||S.role==='pastor',live=!x.cancel&&st!=='Completed';
+ return `<div class="slot ${x.k}"><div class="tm"><b>${tfmt(x.s)}</b><small>${tfmt(endT(x.s,x.d))}</small></div><div class="bd"><b${x.cancel?' style="text-decoration:line-through"':''}>${esc(x.t)}</b><small style="color:var(--mut);display:block">${x.k==='interview'?esc(x.sub)+' · '+x.mode:'Batch '+x.b}${x.i?' · '+esc(x.i):''} · ${x.d} min</small><div class="row" style="margin-top:8px">${badge(st)}${live&&x.meet?`<button class="btn g s" onclick="toast('Opens the Google Meet link saved on this session')">Join</button>`:''}${live&&!x.meet&&x.k!=='interview'?(mg?`<button class="btn o s" onclick="mkMeet('${x.id}')">Create Meet link</button>`:badge('Link pending')):''}${x.cancel?'<small style="color:var(--mut)">Cancelled classes never count as absences</small>':''}</div></div></div>`}
+function selD(k){const d=new Date(k+'T00:00:00');S.cal.sel=k;S.cal.y=d.getFullYear();S.cal.m=d.getMonth();go();if(innerWidth<=860)setTimeout(()=>{const c=document.querySelectorAll('.calw>.card')[1];c&&c.scrollIntoView({behavior:'smooth',block:'start'})},50)}
+function mv(n){let m=S.cal.m+n,y=S.cal.y;if(m<0){m=11;y--}if(m>11){m=0;y++}S.cal.m=m;S.cal.y=y;go()}
+function mkMeet(id){S.meetOk[id]=true;toast('Meet link created through Google Calendar (demo)');go()}
+function modal(h){let m=$('#modal');if(!m){m=document.createElement('div');m.id='modal';document.body.appendChild(m)}m.innerHTML='<div class="ov" onclick="closeM()"><div class="dlg" role="dialog" aria-modal="true" onclick="event.stopPropagation()">'+h+'</div></div>'}
+function closeM(){const m=$('#modal');if(m)m.innerHTML=''}
+function sessModal(){const bs=S.role==='pastor'?['BF-01']:Object.keys(INS);modal(`<h3>New class session</h3><form onsubmit="addSess(event)"><label class="full">Title<input name="t" required></label><label>Batch<select name="b">${bs.map(b=>`<option>${b}</option>`).join('')}</select></label><label>Date<input type="date" name="d" value="${S.cal.sel}" required></label><label>Start time<input type="time" name="s" value="18:00" required></label><label>Duration (min)<input type="number" name="l" value="60" min="15" step="15"></label><span class="err full" id="fe"></span><div class="full row"><button class="btn g">Schedule</button><button type="button" class="btn o" onclick="closeM()">Cancel</button></div></form>`)}
+function addSess(e){e.preventDefault();const f=e.target,ev={id:'X'+Date.now(),b:f.b.value,t:f.t.value,s:f.s.value,d:+f.l.value,i:INS[f.b.value],date:f.d.value,meet:false};
+ const c=evs(ev.date).find(x=>x.i===ev.i&&!x.cancel&&mins(x.s)<mins(ev.s)+ev.d&&mins(ev.s)<mins(x.s)+x.d);
+ if(c){$('#fe').textContent='Clashes with “'+c.t+'” at '+tfmt(c.s)+' for '+ev.i+'. Pick another time.';return}
+ S.extra.push(ev);closeM();toast('Session scheduled. Create the Meet link to make it ready to join.');selD(ev.date)}
+function intModal(id){const c=S.apps.filter(a=>a.s==='Submitted'||a.id===id);if(!c.length){toast('No applications are waiting for an interview');return}
+ modal(`<h3>Schedule interview</h3><form onsubmit="addInt(event)"><label class="full">Candidate<select name="a">${c.map(a=>`<option value="${a.id}"${a.id===id?' selected':''}>${esc(a.n)} (${a.t})</option>`).join('')}</select></label><label>Date<input type="date" name="d" value="${ds(addD(TODAY,1))}" required></label><label>Time<input type="time" name="s" value="11:00" required></label><label>Interviewer<select name="i"><option>Tech Reviewer</option><option>Dr. Peter Isaac</option></select></label><label>Mode<select name="m"><option>Online</option><option>Offline</option></select></label><div class="full row"><button class="btn g">Send invitation</button><button type="button" class="btn o" onclick="closeM()">Cancel</button></div></form>`)}
+function addInt(e){e.preventDefault();const f=e.target,a=S.apps.find(x=>x.id===f.a.value);S.ints.push({id:'I'+Date.now(),date:f.d.value,s:f.s.value,n:a.n,st:'Initial screening',by:f.i.value,mode:f.m.value});closeM();setApp(a.id,'Interview Scheduled')}
+function setApp(id,s){const a=S.apps.find(x=>x.id===id);a.s=s;S.audit.unshift([new Date().toLocaleString('en-IN',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'}),ROLES[S.role][3],id+' moved to '+s]);S.notes.unshift({t:a.n+': application moved to “'+s+'”',w:'Just now',r:0});toast(id+' moved to “'+s+'”');go()}
+function csv(n,h,r){const t=[h].concat(r).map(x=>x.map(c=>'"'+String(c).replace(/<[^>]+>/g,'').replace(/"/g,'""')+'"').join(',')).join('\n'),a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'text/csv'}));a.download=n+'.csv';a.click();toast('Exported '+n+'.csv')}
+const M=(t,h,r,n)=>`<div class="card"><h3>${t}</h3>${table(h,r)}${n?`<p class="note">${n}</p>`:''}</div>`;
+const bar=v=>`<div class="prog"><i style="width:${v}%"></i></div>`;
+const tog=(l,on)=>`<label class="sw"><input type="checkbox" ${on?'checked':''} onchange="toast('Saved')"> ${l}</label>`;
+const _ap=V.applications,_res=V.results,_hist=V.history,_att=V.attendance;
+Object.assign(V,{
+calendar(){const c=S.cal,st=new Date(c.y,c.m,1).getDay(),dim=new Date(c.y,c.m+1,0).getDate();let cells='';
+ for(let i=0;i<st;i++)cells+='<span></span>';
+ for(let d=1;d<=dim;d++){const k=c.y+'-'+pad(c.m+1)+'-'+pad(d),e=evs(k);cells+=`<button class="day${k===c.sel?' sel':''}${k===ds(TODAY)?' today':''}" onclick="selD('${k}')" aria-label="${d} ${MN[c.m]}: ${e.length} sessions"><b>${d}</b><span class="dots">${e.slice(0,4).map(x=>`<i class="${x.cancel?'x':x.k}"></i>`).join('')}</span>${e.slice(0,2).map(x=>`<em class="chip ${x.k}">${tfmt(x.s).replace(' ','').toLowerCase()} ${esc(x.t.split(/[:,]/)[0])}</em>`).join('')}${e.length>2?`<small class="more2">+${e.length-2} more</small>`:''}</button>`}
+ const sd=new Date(c.sel+'T00:00:00'),l=evs(c.sel),can=S.role==='admin'||S.role==='pastor';
+ return `<div class="calw"><div class="card"><div class="ch"><h3 style="margin:0">${MN[c.m]} ${c.y}</h3><div class="row"><button class="ghost" onclick="mv(-1)" aria-label="Previous month">‹</button><button class="ghost" onclick="selD('${ds(TODAY)}')">Today</button><button class="ghost" onclick="mv(1)" aria-label="Next month">›</button></div></div><div class="wd">${DN.map(x=>`<span>${x}</span>`).join('')}</div><div class="cg">${cells}</div><div class="row lg"><span><i></i>Class</span><span><i class="interview"></i>Interview</span><span><i class="exam"></i>Exam</span><span><i class="x"></i>Cancelled</span></div></div>
+ <div class="card"><div class="ch"><div><h3 style="margin:0">${DN[sd.getDay()]}, ${sd.getDate()} ${MN[sd.getMonth()]}</h3><small style="color:var(--mut)">${l.length} scheduled period${l.length===1?'':'s'} · your local time</small></div>${can?'<button class="btn g s" onclick="sessModal()">+ Session</button>':''}</div>${l.length?l.map(x=>slotHtml(x,c.sel)).join(''):'<div class="empty">No classes on this day.</div>'}</div></div>`},
+meet(){const r=[];for(let i=0;i<14;i++){const k=ds(addD(TODAY,i));evs(k).filter(x=>x.k==='class').forEach(x=>r.push(`<div class="item"><div><b>${esc(x.t)}</b><small>${DN[new Date(k+'T00:00:00').getDay()]} ${k.slice(8)} ${MN[+k.slice(5,7)-1].slice(0,3)} · ${tfmt(x.s)} · Batch ${x.b}</small></div>${x.cancel?badge('Cancelled'):x.meet?'<button class="btn g s" onclick="toast(\'Opens the saved Google Meet link\')">Join</button>':(S.role==='student'?badge('Link pending'):`<button class="btn o s" onclick="mkMeet('${x.id}')">Create link</button>`)}</div>`))}
+ return `<div class="card"><h3>Google Meet sessions · next 14 days</h3>${r.join('')||'<div class="empty">No sessions in the next 14 days.</div>'}<p class="note">A session is ready to join only after Google Calendar returns a verified Meet link. Joining a meeting never marks attendance.</p></div>`},
+applications(){const all=S.apps;if(S.f!=='All')S.apps=all.filter(a=>a.s===S.f);const h=_ap();S.apps=all;
+ return `<div class="row" style="margin-bottom:12px;justify-content:space-between"><select aria-label="Filter by status" onchange="S.f=this.value;go()">${['All'].concat([...new Set(all.map(a=>a.s))]).map(s=>`<option${s===S.f?' selected':''}>${s}</option>`).join('')}</select><button class="btn o" onclick="csv('applications',['ID','Applicant','Type','Program','Status'],S.apps.map(a=>[a.id,a.n,a.t,a.c,a.s]))">Export CSV</button></div>`+h},
+interviews(){return `<div class="card"><div class="ch"><h3 style="margin:0">Interview schedule</h3><button class="btn g s" onclick="intModal()">+ Schedule</button></div>${table(['When','Candidate','Stage','Interviewer','Mode'],S.ints.slice().sort((a,b)=>a.date.localeCompare(b.date)).map(i=>[i.date===ds(TODAY)?'Today '+tfmt(i.s):i.date.slice(8)+' '+MN[+i.date.slice(5,7)-1].slice(0,3)+' '+tfmt(i.s),'<b>'+esc(i.n)+'</b>',i.st,i.by,i.mode]))}<p class="note">Internal notes are visible to authorised team members only, never to applicants.</p></div>`},
+results(){return S.role==='student'?M('My results',['Assessment','Date','Score','Grade'],[['Quiz 1: Creation','02 Oct','18 / 20','A'],['Assignment: Genesis 1','09 Oct','42 / 50','B+'],['Quiz 2: Covenant','16 Oct','17 / 20','A']]):_res()},
+history(){return S.role==='tech'?_hist():M('Class history',['Date','Class','Batch','Attendance','Status'],[['14 Oct','Genesis 3','BF-01','17 / 18',badge('Completed')],['16 Oct','Genesis 4','BF-01','16 / 18',badge('Completed')],['18 Oct','Gospel of John 1','BS-02','21 / 22',badge('Completed')]])},
+attendance(){if(S.role!=='admin')return _att();return `<div class="card"><div class="ch"><h3 style="margin:0">Student attendance report</h3><button class="btn o s" onclick="csv('attendance',['Student','Batch','Attendance %'],ST)">Export CSV</button></div>${table(['Student','Batch','Attendance','Flag'],ST.map(s=>['<b>'+s[0]+'</b>',s[1],bar(s[2])+'<small>'+s[2]+'%</small>',s[2]<S.thr?badge('Low'):badge('Good')]))}<p class="note">Threshold is ${S.thr}% (change it in Settings). Cancelled classes and approved leave are excluded from the denominator.</p></div>`},
+churches(){return M('Churches & organizations',['Organization','City','Students','Pastors','Plan','Status'],[['Grace Fellowship Church','Hyderabad',182,24,'Standard',badge('Active')],['Hope Community Church','Mahbubnagar',96,15,'Standard',badge('Active')],['Zion Bible Institute','Warangal',134,28,'Premium',badge('Active')]],'Each organization’s data is fully isolated from the others.')},
+users(){return M('User management',['Name','Email','Role','Status','Last login'],[['Admin User','admin@shepherd.org','Super Admin',badge('Active'),'Today'],['Tech Reviewer','tech@shepherd.org','Technical Team',badge('Active'),'Today'],['Pr. John Mathew','john@shepherd.org','Pastor',badge('Active'),'Yesterday'],['Daniel Joseph','daniel@mail.com','Student',badge('Active'),'2 h ago']])},
+students(){const r=ST.map(s=>['<b>'+s[0]+'</b>',s[1],bar(s[2]),s[2]+'%']);return `<div class="row" style="justify-content:flex-end;margin-bottom:12px"><button class="btn o" onclick="csv('students',['Student','Batch','Attendance %'],ST)">Export CSV</button></div>`+M(S.role==='pastor'?'My students':'Students',['Student','Batch','Attendance','%'],r,S.role==='pastor'?'You only see students in your assigned batches.':'')},
+pastors(){return M('Pastors & instructors',['Pastor','Church','Role','Batches','Status'],[['Pr. John Mathew','Grace Fellowship','Instructor','BF-01',badge('Active')],['Pr. Grace David','Hope Community','Instructor','BS-02',badge('Active')],['Dr. Peter Isaac','Zion Institute','Instructor + Trainee','PT-01',badge('Active')],['Pr. Samuel Raj','Hope Community','Trainee','—',badge('Interview Scheduled')]])},
+techteam(){return M('Technical team',['Member','Interviews done','Pending reviews','Status'],[['Tech Reviewer',46,5,badge('Active')],['Dr. Peter Isaac',31,2,badge('Active')]])},
+docs(){return M('Document verification',['Applicant','Document','Submitted','Action'],[['Abel Kumar','Ordination certificate','16 Oct','<button class="btn s" onclick="toast(\'Document verified\')">Verify</button> <button class="btn o s" onclick="toast(\'Re-upload requested\')">Request again</button>'],['Daniel Joseph','Photo ID','15 Oct',badge('Verified')],['Ruth Mercy','Church recommendation','12 Oct',badge('Verified')]],'Documents are kept in private storage and visible only to authorised reviewers.')},
+assess(){return M('Technical assessments',['Candidate','Stage','Score','Notes'],[['Ruth Mercy','Technical assessment','82 / 100','Strong scripture recall'],['Pr. Samuel Raj','Final review','—','Scheduled today']],'Notes are internal and never shown to applicants.')},
+approved(){return M('Approved candidates',['ID','Candidate','Type','Program'],S.apps.filter(a=>/Approved|Enrolled|Passed|Final/.test(a.s)).map(a=>[a.id,esc(a.n),a.t,esc(a.c)]))},
+rejected(){return M('Rejected or deferred',['ID','Candidate','Status'],S.apps.filter(a=>/Fail|Reject|Required/.test(a.s)).map(a=>[a.id,esc(a.n),badge(a.s)]))},
+plans(){return M('Subscription plans',['Plan','Audience','Duration','Price','Renewal','Status'],[['3-Month Student Plan','Student','3 months','₹3,000','Manual',badge('Active')],['6-Month Student Plan','Student','6 months','₹5,500','Manual',badge('Active')],['3-Month Pastor Training','Pastor','3 months','₹4,000','Manual',badge('Active')],['Individual Mentoring','Both','Monthly','₹900','Auto reminder',badge('Active')]],'Statuses: Pending Payment, Active, Expiring Soon, Expired, Cancelled, Suspended, Refunded.')},
+exams(){return M('Assignments & examinations',['Title','Course','Due / date','Type','Status'],[['Reflection on Genesis 1','Foundation','25 Oct','Assignment',badge('Submitted')],['Memory verse: Psalm 23','Foundation','30 Oct','Assignment',badge('Pending')],['Mid-Term Exam','Foundation',ds(addD(TODAY,23)).slice(8)+' '+MN[addD(TODAY,23).getMonth()].slice(0,3),'Exam',badge('Upcoming')]])},
+lessons(){return `<div class="card"><h3>Course lessons</h3>${[['Module 1: Creation','Genesis 1–2 · 4 lessons · complete'],['Module 2: Covenant','Genesis 12–17 · 5 lessons · in progress'],['Module 3: Exodus','Exodus 1–15 · 6 lessons · locked until Module 2']].map(m=>`<details><summary>${m[0]}</summary><p class="note">${m[1]}</p></details>`).join('')}</div>`},
+progress(){return `<div class="card"><h3>Learning progress</h3>${[['Lessons',58],['Assignments',66],['Attendance',92],['Exams',40]].map(p=>`<div class="item" style="display:block"><div class="row" style="justify-content:space-between"><b>${p[0]}</b><span>${p[1]}%</span></div>${bar(p[1])}</div>`).join('')}</div>`},
+feedback(){return M('Feedback & evaluations',['Student','Assignment','Score','Feedback'],[['Daniel Joseph','Genesis 1','42 / 50','Clear structure, add more references'],['Ruth Mercy','Genesis 1','47 / 50','Excellent reflection']])},
+interviewsch(){return `<div class="card"><h3>Your interview</h3><div class="slot interview"><div class="tm"><b>${tfmt('11:00')}</b><small>${tfmt('11:30')}</small></div><div class="bd"><b>Initial screening</b><small style="color:var(--mut);display:block">Tomorrow · Online · Tech Reviewer</small><div class="row" style="margin-top:8px"><button class="btn g s" onclick="toast('Link opens 10 minutes before the interview')">Join interview</button><button class="btn o s" onclick="toast('Reschedule request sent')">Request reschedule</button></div></div></div><p class="note">Bring a photo ID and your church recommendation.</p></div>`},
+notify(){const adm=S.role==='admin',u=S.notes.filter(n=>!n.r).length;return (adm?`<div class="card" style="margin-bottom:16px"><h3>Send announcement</h3><form onsubmit="event.preventDefault();S.notes.unshift({t:this.m.value,w:'Just now',r:0});toast('Announcement sent to '+this.a.value);go()"><label>Audience<select name="a"><option>All users</option><option>Students</option><option>Pastors</option><option>Batch BF-01</option></select></label><label class="full">Message<textarea name="m" rows="2" required></textarea></label><div class="full"><button class="btn g">Send</button></div></form></div>`:'')+`<div class="card"><div class="ch"><h3 style="margin:0">Notifications${u?' ('+u+' new)':''}</h3><button class="btn o s" onclick="S.notes.forEach(n=>n.r=1);go()">Mark all read</button></div>${S.notes.map(n=>`<div class="item"><div>${n.r?'':'<span class="badge b-info">New</span> '}${esc(n.t)}<small>${n.w}</small></div></div>`).join('')}</div>`},
+support(){return `<div class="grid two"><div class="card"><h3>Contact support</h3><form onsubmit="event.preventDefault();S.tickets.unshift(['T-'+(40+S.tickets.length),this.s.value,'Open']);toast('Ticket created');go()"><label class="full">Subject<input name="s" required></label><label class="full">Details<textarea rows="3"></textarea></label><div class="full"><button class="btn g">Send ticket</button></div></form></div><div class="card"><h3>My tickets</h3>${S.tickets.map(t=>`<div class="item"><div>${esc(t[1])}<small>${t[0]}</small></div>${badge(t[2])}</div>`).join('')}</div></div><div class="card" style="margin-top:16px"><h3>Frequently asked</h3><details><summary>How do I join a class?</summary><p class="note">Open Calendar, pick the date and choose Join when the link is ready.</p></details><details><summary>When does my subscription expire?</summary><p class="note">See Payments. We send reminders before expiry.</p></details></div>`},
+audit(){return M('Audit logs',['When','Who','Action'],S.audit,'Every sensitive administrative change is recorded here.')},
+roles(){const P=['View all applications','Approve enrollment','Record attendance','Manage payments','View interview notes'],R=[[1,0,0,0,0],[1,0,0,0,1],[0,0,1,0,0]];return M('Roles & permissions',['Permission','Admin','Tech team','Pastor'],P.map((p,i)=>[p,tog('',1),tog('',[1,0,0,0,1][i]),tog('',[0,0,1,0,0][i])]),'Permissions are enforced on the server, not only in the interface.')},
+settings(){return `<div class="card"><h3>Settings</h3><form onsubmit="event.preventDefault();S.thr=+this.th.value;toast('Settings saved');go()"><label>Attendance threshold (%)<input name="th" type="number" min="0" max="100" value="${S.thr}"></label><label>Subscription grace period (days)<input type="number" value="7"></label><label>Time zone<select><option>Asia/Kolkata (IST)</option><option>UTC</option></select></label><label>Language<select><option>English</option><option>Telugu</option><option>Hindi</option></select></label><div class="full">${tog('Email notifications',1)}${tog('Class reminders 30 minutes before',1)}</div><div class="full"><button class="btn g">Save settings</button></div></form></div>`},
+profile(){const r=ROLES[S.role];return `<div class="card"><h3>My profile</h3><form onsubmit="event.preventDefault();toast('Profile updated')"><label>Full name<input value="${r[3]}"></label><label>Email<input type="email" value="${r[3].toLowerCase().replace(/[^a-z]+/g,'.')}@shepherd.org"></label><label>Mobile<input value="+91 "></label><label>Role<input value="${r[0]}" disabled></label><div class="full row"><button class="btn g">Save changes</button><button type="button" class="btn o" onclick="toast('Password reset link sent')">Change password</button></div></form></div>`},
+certs(){return `<div class="card"><h3>Certificates</h3><p class="note" style="margin-bottom:14px">Certificates are issued only after you meet the completion criteria.</p><form onsubmit="return vc(event)"><label>Verify a certificate ID<input name="c" placeholder="CERT-2026-0042"></label><div class="full row"><button class="btn o">Verify</button><span id="cv"></span></div></form></div>`},
+materials(){const q=(S.mq||'').toLowerCase(),L=['Genesis 1–11 study notes (PDF)','Covenant themes: audio lesson','Gospel of John outline (PDF)','Scripture memory plan'].filter(m=>m.toLowerCase().includes(q));return `<div class="card"><h3>Bible study materials</h3><label style="margin-bottom:10px">Search by book or topic<input value="${esc(S.mq||'')}" placeholder="e.g. Genesis, John" onchange="S.mq=this.value;go()"></label>${L.map(m=>`<div class="item"><div>${m}<small>Enrolled course content only</small></div><button class="btn o s" onclick="toast('Opens the file from private storage')">Open</button></div>`).join('')||'<div class="empty">No materials match your search.</div>'}</div>`}});
+V.reports=((r)=>()=>r()+`<div class="row" style="margin-top:12px"><button class="btn o" onclick="csv('revenue',['Month','Revenue (thousand)'],[['May',310],['Jun',350],['Jul',390],['Aug',420],['Sep',455],['Oct',480]])">Export revenue CSV</button></div>`)(V.reports);
+
+function vc(e){e.preventDefault();const ok=e.target.c.value.trim().toUpperCase()==='CERT-2026-0042';$('#cv').innerHTML=ok?badge('Valid')+' Daniel Joseph, 3-Month Bible Foundation':'<span class="err">No certificate found with that ID.</span>';return false}
+
+go();
+</script>
+</body>
+</html>

@@ -157,6 +157,24 @@ details{border-bottom:1px solid var(--line);padding:10px 0}summary{cursor:pointe
 .calw{grid-template-columns:1fr}.day{min-height:50px;align-items:center;padding:4px}.chip,.more2{display:none}.dots{display:flex}.cg,.wd{gap:3px}
 .more div{max-height:70vh;overflow:auto}
 }
+.top{display:grid;grid-template-columns:1fr auto 1fr;align-items:center}
+.top .who{justify-self:end}
+.brandc{display:flex;align-items:center;gap:9px;font-family:Newsreader,Georgia,serif;font-size:20px;font-weight:600;white-space:nowrap}
+.brandc .cross{width:28px;height:28px;font-size:14px;border-radius:8px}
+aside .logo{font-size:18px;white-space:nowrap}
+.kpi em{display:block}
+.steps{display:flex;gap:18px;margin-bottom:18px;flex-wrap:wrap}
+.steps span{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--mut)}
+.steps b{width:26px;height:26px;border-radius:50%;background:var(--line);display:grid;place-items:center;font-size:12px;color:var(--tx)}
+.steps .c{color:var(--tx)}.steps .c b{background:var(--gold);color:var(--ink)}.steps .d b{background:var(--ok);color:#fff}
+.fee{display:grid;gap:8px;background:var(--bg);border-radius:12px;padding:14px}
+.fee div{display:flex;justify-content:space-between;gap:12px}
+.fee .tot{border-top:1px dashed var(--line);padding-top:8px;font-weight:700;font-size:17px}
+.ok{width:64px;height:64px;border-radius:50%;background:var(--okb);color:var(--ok);display:grid;place-items:center;font-size:30px;margin:0 auto 10px}
+.btn.bad{background:var(--bad)}
+td select{padding:5px 8px;font-size:13px;max-width:150px}
+@media(max-width:860px){.top{grid-template-columns:auto 1fr auto;gap:8px}.top h2{font-size:17px}.brandc{justify-self:center;font-size:16px}.brandc .cross{display:none}}
+@media(max-width:520px){.ac{display:none}.brandc{font-size:15px}.top .ghost:not(.bell){padding:6px 9px;font-size:13px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -187,7 +205,7 @@ const BNP={admin:['dashboard','applications','calendar','attendance'],tech:['das
 const OPEN=['dashboard','profile','register','status','interviewsch','payments','notify','support','settings'];
 const ROLES={admin:['Super Admin','Whole platform','👑','Admin User','AU'],tech:['Technical Team','Applications & interviews','🛡️','Tech Reviewer','TR'],pastor:['Pastor / Instructor','Teach and train','✝️','Pr. John Mathew','JM'],student:['Student','Learn and track progress','📖','Daniel Joseph','DJ']};
 const locked=v=>S.role==='student'&&S.stStatus<2&&!OPEN.includes(v);
-const badge=s=>`<span class="badge ${/Passed|Approved|Enrolled|Active|Paid|Present|Completed|Verified|Good|Resolved/.test(s)?'b-ok':/Required|Pending|Submitted|Inactive|Today|Open/.test(s)?'b-warn':/Fail|Reject|Absent|Cancel|Low/.test(s)?'b-bad':'b-info'}">${esc(s)}</span>`;
+const badge=s=>`<span class="badge ${/Passed|Approved|Enrolled|Active|Paid|Present|Completed|Verified|Good|Resolved|Waived|Valid/.test(s)?'b-ok':/Required|Pending|Submitted|Inactive|Today|Open|New/.test(s)?'b-warn':/Fail|Reject|Absent|Cancel|Low|Suspended|Closed|Refunded|Archived/.test(s)?'b-bad':'b-info'}">${esc(s)}</span>`;
 const kpi=(l,v,n='')=>`<div class="card kpi"><small>${l}</small><b>${v}</b> <em>${n}</em></div>`;
 const table=(h,r)=>`<div class="tw"><table><thead><tr>${h.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>${r.length?r.map(x=>`<tr>${x.map(c=>`<td>${c}</td>`).join('')}</tr>`).join(''):`<tr><td colspan="${h.length}" class="empty">Nothing here yet.</td></tr>`}</tbody></table></div>`;
 const bars=(d,l)=>{const m=Math.max(...d);return `<div class="bars">${d.map((v,i)=>`<div>${v}<span style="height:${v/m*100}%"></span>${l[i]}</div>`).join('')}</div>`};
@@ -246,7 +264,7 @@ status(){const st=['Submitted','Under Review','Enrolled'],steps=[['Application s
  <p style="color:var(--mut);font-size:13px">Before approval you can only reach registration, status, interviews, notifications and support. Demo control:</p>
  <div class="row" style="margin-top:8px">${[0,1,2].map(i=>`<button class="btn s ${S.stStatus===i?'':'o'}" onclick="S.stStatus=${i};go()">${['Submitted','Interview stage','Enrolled'][i]}</button>`).join('')}</div></div>`}
 };
-const batchesN=()=>S.batches.length;
+const batchesN=()=>S.batches.filter(b=>b[6]!=='Closed').length;
 /* ---------- actions ---------- */
 function setApp(id,s){S.apps.find(a=>a.id===id).s=s;toast(`${id} moved to “${s}”`);go()}
 function mark(p,k){S.att[p]=k;S.saved=false;go()}
@@ -270,7 +288,7 @@ function go(){
  const side=items.map(i=>`<button class="nav ${i[0]===cur[0]?'on':''}" ${locked(i[0])?'disabled':''} onclick="nav('${i[0]}')"><span>${i[1]}</span>${i[2]}${locked(i[0])?' 🔒':''}</button>`).join('');
  const pre=S.role==='student'&&S.stStatus<2?['dashboard','register','status','payments']:BNP[S.role],bn=items.filter(i=>pre.includes(i[0])),rest=items.filter(i=>!pre.includes(i[0]));
  root.innerHTML=`<div class="app"><aside><div class="logo"><span class="cross">✝</span>Shepherd Academy</div>${side}<button class="nav" style="margin-top:auto" onclick="logout()"><span>↩️</span>Switch portal / Logout</button></aside>
- <div><header class="top"><h2>${cur[2]}</h2><div class="who"><button class="ghost bell" onclick="nav('notify')" aria-label="Notifications">🔔${S.notes.some(n=>!n.r)?`<span class="dotn">${S.notes.filter(n=>!n.r).length}</span>`:''}</button><span class="nm"><b>${r[3]}</b> <small style="color:var(--mut)">${r[0]}</small></span><div class="av">${r[4]}</div><button class="ghost" onclick="logout()" aria-label="Log out">Log out</button></div></header><main>${body}</main></div></div>
+ <div><header class="top"><h2>${cur[2]}</h2><div class="brandc"><span class="cross">✝</span><b>Shepherd<span class="ac"> Academy</span></b></div><div class="who"><button class="ghost bell" onclick="nav('notify')" aria-label="Notifications">🔔${S.notes.some(n=>!n.r)?`<span class="dotn">${S.notes.filter(n=>!n.r).length}</span>`:''}</button><span class="nm"><b>${r[3]}</b> <small style="color:var(--mut)">${r[0]}</small></span><div class="av">${r[4]}</div><button class="ghost" onclick="logout()" aria-label="Log out">Log out</button></div></header><main>${body}</main></div></div>
  <nav class="bn" aria-label="Primary">${bn.map(i=>`<button class="${i[0]===cur[0]?'on':''}" onclick="nav('${i[0]}')"><span>${i[1]}</span>${i[2].split(' ').slice(-1)[0]}</button>`).join('')}${rest.length?`<button onclick="S.more=true;go()"><span>⋯</span>More</button>`:''}</nav>
  ${S.more?`<div class="more" onclick="S.more=false;go()"><div onclick="event.stopPropagation()">${rest.map(i=>`<button onclick="nav('${i[0]}')"><span>${i[1]}</span>${i[2]}${locked(i[0])?' 🔒':''}</button>`).join('')}</div></div>`:''}`;
 }
@@ -291,7 +309,7 @@ notes:[{t:'Class today: Genesis: Creation & Covenant at 7:00 PM',w:'1 h ago',r:0
 audit:[['18 Oct, 4:10 PM','Admin User','Approved enrollment A-099'],['17 Oct, 11:32 AM','Tech Reviewer','Requested documents for A-104'],['15 Oct, 9:05 AM','Admin User','Changed attendance threshold to 75%']],
 tickets:[['T-31','Cannot see Genesis notes','Open'],['T-27','Invoice for October','Resolved']]});
 const ST=[['Daniel Joseph','BF-01',92],['Ruth Mercy','BS-02',88],['Esther Priya','BF-01',71],['Samuel Paul','BS-02',64],['Naomi Grace','BF-01',95],['Joel Ravi','PT-01',78]];
-const vis=e=>S.role==='admin'||(S.role==='tech'?e.k==='interview':e.k!=='interview'&&(S.role==='pastor'?['BF-01','PT-01'].includes(e.b):e.b==='BF-01'));
+const vis=e=>S.role==='admin'||(S.role==='tech'?e.k==='interview':e.k!=='interview'&&(S.role==='pastor'?(e.b==='PT-01'||INS[e.b]===ROLES.pastor[3]):e.b==='BF-01'));
 function evs(key){const w=new Date(key+'T00:00:00').getDay(),o=[];
  if(key>=W0&&key<=W1)RULES.forEach(r=>{if(r.w.includes(w))o.push({k:'class',id:r.b+key,b:r.b,t:r.t,s:r.s,d:r.d,i:INS[r.b],cancel:S.cancel.includes(key)&&r.b==='BF-01',meet:r.b!=='PT-01'})});
  S.extra.filter(e=>e.date===key).forEach(e=>o.push(Object.assign({k:'class'},e)));
@@ -361,6 +379,154 @@ materials(){const q=(S.mq||'').toLowerCase(),L=['Genesis 1–11 study notes (PDF
 V.reports=((r)=>()=>r()+`<div class="row" style="margin-top:12px"><button class="btn o" onclick="csv('revenue',['Month','Revenue (thousand)'],[['May',310],['Jun',350],['Jul',390],['Aug',420],['Sep',455],['Oct',480]])">Export revenue CSV</button></div>`)(V.reports);
 
 function vc(e){e.preventDefault();const ok=e.target.c.value.trim().toUpperCase()==='CERT-2026-0042';$('#cv').innerHTML=ok?badge('Valid')+' Daniel Joseph, 3-Month Bible Foundation':'<span class="err">No certificate found with that ID.</span>';return false}
+
+/* ===== v3: registration fee, admin management, scheduling control ===== */
+const fmt=n=>'₹'+Number(n).toLocaleString('en-IN');
+const dstr=()=>new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short'});
+const aud=m=>S.audit.unshift([new Date().toLocaleString('en-IN',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'}),ROLES[S.role][3],m]);
+const note=t=>S.notes.unshift({t,w:'Just now',r:0});
+const fld=(l,n,v,x)=>`<label>${l}<input name="${n}" value="${esc(v===undefined?'':v)}" ${x||''}></label>`;
+const sel=(l,n,o,v)=>`<label>${l}<select name="${n}">${o.map(x=>`<option${x===v?' selected':''}>${esc(x)}</option>`).join('')}</select></label>`;
+const sb=(t,f,c)=>`<button class="btn s ${c||''}" onclick="${f}">${t}</button>`;
+const acts=b=>`<div class="row">${b.join('')}</div>`;
+const FOOT=(l)=>`<span class="err full" id="fe"></span><div class="full row"><button class="btn g">${l||'Save'}</button><button type="button" class="btn o" onclick="closeM()">Cancel</button></div>`;
+const STAT=['Draft','Submitted','Under Review','Documents Required','Interview Scheduled','Interview In Progress','Interview Passed','Interview Failed','Final Approval Pending','Approved','Rejected','Enrollment Pending','Enrolled','Withdrawn'];
+const pv=b=>b==='PT-01'||INS[b]===ROLES.pastor[3];
+const adjB=(id,n)=>{const b=S.batches.find(x=>x[0]===id);if(b)b[4]=Math.max(0,b[4]+n)};
+S.batches.forEach(b=>{if(!b[6])b[6]='Active'});
+S.apps.forEach(a=>{a.fee=a.fee||'Paid'});
+Object.assign(S,{ed:{},cx:{},regFee:500,waive:'WAIVER2026',uf:'All',
+reg:{step:1,type:'Student',d:{},pay:'UPI',w:false,res:null},
+staff:[{id:'U1',n:'Tech Reviewer',e:'tech@shepherd.org',m:'+91 98480 11122',c:'Shepherd Academy',k:'Technical Team',st:'Active'},{id:'U2',n:'Mary Joseph',e:'mary@shepherd.org',m:'+91 98480 33344',c:'Shepherd Academy',k:'Technical Team',st:'Active'},{id:'U3',n:'Pr. John Mathew',e:'john@shepherd.org',m:'+91 99890 55501',c:'Grace Fellowship',k:'Instructor',st:'Active'},{id:'U4',n:'Pr. Grace David',e:'grace@shepherd.org',m:'+91 99890 55502',c:'Hope Community',k:'Instructor',st:'Active'},{id:'U5',n:'Dr. Peter Isaac',e:'peter@shepherd.org',m:'+91 99890 55503',c:'Zion Institute',k:'Pastor + Instructor',st:'Active'},{id:'U6',n:'Pr. Samuel Raj',e:'samuel@shepherd.org',m:'+91 99890 55504',c:'Hope Community',k:'Pastor',st:'Active'}],
+stu:ST.map(s=>({n:s[0],b:s[1],p:s[2],e:s[0].toLowerCase().replace(/\s+/g,'.')+'@mail.com',m:'+91 ',st:'Active'})),
+plans:[['3-Month Student Plan','Student','3 months','₹3,000','Manual','Active'],['6-Month Student Plan','Student','6 months','₹5,500','Manual','Active'],['3-Month Pastor Training','Pastor','3 months','₹4,000','Manual','Active'],['Individual Mentoring','Both','Monthly','₹900','Auto reminder','Active']],
+pay:[{ref:'TX-8841',who:'Daniel Joseph',item:'3-Month Student Plan',amt:3000,date:'02 Oct',mode:'UPI',st:'Paid'},{ref:'TX-8790',who:'Daniel Joseph',item:'Registration fee',amt:500,date:'24 Sep',mode:'UPI',st:'Paid'},{ref:'TX-8902',who:'Daniel Joseph',item:'Installment 2 of 2',amt:1500,date:'14 Nov',mode:'—',st:'Pending'},{ref:'TX-8795',who:'Ruth Mercy',item:'Registration fee',amt:500,date:'26 Sep',mode:'Card',st:'Paid'}]});
+const CF=[['Course name','t'],['Audience',['Student','Pastor','Both']],['Duration (e.g. 12 wks)','t'],['Lessons','n'],['Fee (e.g. ₹3,000)','t'],['Status',['Active','Inactive','Archived']]];
+const PF=[['Plan name','t'],['Audience',['Student','Pastor','Both']],['Duration','t'],['Price (e.g. ₹3,000)','t'],['Renewal',['Manual','Auto reminder']],['Status',['Active','Inactive']]];
+/* ---- scheduling control ---- */
+const _ev=evs;evs=function(k){const o=_ev(k);o.forEach(x=>{if(S.ed[x.id])Object.assign(x,S.ed[x.id]);if(S.cx[x.id]!==undefined){x.cancel=true;x.note=S.cx[x.id]}if(x.k==='class'&&!['BF-01','BS-02'].includes(x.b)&&x.id[0]!=='X'&&!S.meetOk[x.id])x.meet=false});return o.sort((a,b)=>mins(a.s)-mins(b.s))};
+const clash=(date,s,d,ins,ign)=>evs(date).find(x=>x.id!==ign&&x.i===ins&&!x.cancel&&mins(x.s)<mins(s)+d&&mins(s)<mins(x.s)+x.d);
+slotHtml=function(x,key){const st=x.cancel?'Cancelled':key<ds(TODAY)?'Completed':key===ds(TODAY)?'Today':'Upcoming',adm=S.role==='admin',mg=adm||S.role==='pastor',live=!x.cancel&&st!=='Completed',q=`'${x.id}','${key}'`;
+ return `<div class="slot ${x.k}"><div class="tm"><b>${tfmt(x.s)}</b><small>${tfmt(endT(x.s,x.d))}</small></div><div class="bd"><b${x.cancel?' style="text-decoration:line-through"':''}>${esc(x.t)}</b><small style="color:var(--mut);display:block">${x.k==='interview'?esc(x.sub)+' · '+x.mode:'Batch '+x.b}${x.i?' · '+esc(x.i):''} · ${x.d} min</small>${x.note?`<small style="color:var(--warn);display:block">${esc(x.note)}</small>`:''}<div class="row" style="margin-top:8px">${badge(st)}${live&&x.meet?`<button class="btn g s" onclick="toast('Opens the Google Meet link saved on this session')">Join</button>`:''}${live&&!x.meet&&x.k!=='interview'?(mg?`<button class="btn o s" onclick="mkMeet('${x.id}')">Create Meet link</button>`:badge('Link pending')):''}${adm&&live?(x.k==='class'?sb('Edit',`editModal(${q})`,'o'):'')+sb('Reschedule',`reschModal(${q})`,'o')+sb('Cancel',`cxModal(${q})`,'o'):''}${adm&&x.id[0]==='X'?sb('Delete',`delSess('${x.id}')`,'o'):''}</div></div></div>`};
+function editModal(id,key){const x=evs(key).find(y=>y.id===id);modal(`<h3>Edit session</h3><p class="note" style="margin-bottom:10px">Changes this session only. Edit the batch to change the weekly pattern.</p><form onsubmit="editSave(event,'${id}','${key}')">${fld('Title','t',x.t,'required')}${fld('Start time','s',x.s,'type="time" required')}${fld('Duration (min)','d',x.d,'type="number" min="15" step="15"')}${FOOT()}</form>`)}
+function editSave(e,id,key){e.preventDefault();const f=e.target,v={t:f.t.value,s:f.s.value,d:+f.d.value},x=evs(key).find(y=>y.id===id),c=clash(key,v.s,v.d,x.i,id);
+ if(c){$('#fe').textContent='Clashes with “'+c.t+'” at '+tfmt(c.s)+'.';return}
+ const ex=S.extra.find(y=>y.id===id);if(ex)Object.assign(ex,v);else S.ed[id]=v;aud('Edited session “'+v.t+'” on '+key);note('Class updated: '+v.t+' now at '+tfmt(v.s));closeM();toast('Session updated');go()}
+function reschModal(id,key){const x=evs(key).find(y=>y.id===id);modal(`<h3>Reschedule</h3><p class="note" style="margin-bottom:10px">${esc(x.t)}. The original session stays in the history.</p><form onsubmit="reschSave(event,'${id}','${key}')">${fld('New date','d',key,'type="date" required')}${fld('New time','s',x.s,'type="time" required')}${FOOT('Reschedule')}</form>`)}
+function reschSave(e,id,key){e.preventDefault();const f=e.target,nd=f.d.value,ns=f.s.value,x=evs(key).find(y=>y.id===id);
+ if(x.k==='interview'){const iv=S.ints.find(y=>y.id===id);iv.date=nd;iv.s=ns}
+ else{const c=clash(nd,ns,x.d,x.i,id);if(c){$('#fe').textContent='Clashes with “'+c.t+'” at '+tfmt(c.s)+'.';return}
+  S.cx[id]='Rescheduled to '+nd.slice(8)+'/'+nd.slice(5,7)+' at '+tfmt(ns);S.extra.push({id:'X'+Date.now(),b:x.b,t:x.t,s:ns,d:x.d,i:x.i,date:nd,meet:false,note:'Rescheduled from '+key.slice(8)+'/'+key.slice(5,7)})}
+ aud('Rescheduled “'+x.t+'” to '+nd+' '+ns);note('“'+x.t+'” was rescheduled to '+nd.slice(8)+'/'+nd.slice(5,7)+' at '+tfmt(ns));closeM();toast('Rescheduled. Participants are notified.');selD(nd)}
+function cxModal(id,key){const x=evs(key).find(y=>y.id===id);modal(`<h3>Cancel session?</h3><p class="note" style="margin-bottom:10px">${esc(x.t)}. Cancelled classes never count as absences.</p><form onsubmit="cxSave(event,'${id}','${key}')">${fld('Reason','r','','required')}${FOOT('Cancel session')}</form>`)}
+function cxSave(e,id,key){e.preventDefault();const x=evs(key).find(y=>y.id===id);S.cx[id]='Cancelled: '+e.target.r.value;aud('Cancelled “'+x.t+'” on '+key);note('“'+x.t+'” on '+key.slice(8)+'/'+key.slice(5,7)+' was cancelled');closeM();toast('Session cancelled and participants notified');go()}
+function delSess(id){S.extra=S.extra.filter(x=>x.id!==id);aud('Deleted a scheduled session');toast('Session deleted');go()}
+/* ---- staff: technical team, pastors, instructors ---- */
+function staffModal(id,tab){const p=S.staff.find(x=>x.id===id)||{},ks=tab==='tech'?['Technical Team']:['Pastor','Instructor','Pastor + Instructor'];
+ modal(`<h3>${id?'Edit':'Add'} ${tab==='tech'?'technical team member':'pastor / instructor'}</h3><form onsubmit="saveStaff(event,'${id}')">${fld('Full name','n',p.n,'required')}${fld('Email','e',p.e,'type="email" required')}${fld('Mobile','m',p.m||'+91 ')}${fld('Church / organization','c',p.c)}${sel('Role','k',ks,p.k)}${FOOT(id?'Save changes':'Add & send invitation')}</form>`)}
+function saveStaff(e,id){e.preventDefault();const f=e.target,d={n:f.n.value.trim(),e:f.e.value.trim(),m:f.m.value,c:f.c.value,k:f.k.value};
+ if(S.staff.some(x=>x.e.toLowerCase()===d.e.toLowerCase()&&x.id!==id)){$('#fe').textContent='A user with this email already exists.';return}
+ if(id){const p=S.staff.find(x=>x.id===id);if(p.n!==d.n)S.batches.forEach(b=>{if(b[2]===p.n){b[2]=d.n;INS[b[0]]=d.n}});Object.assign(p,d);aud('Updated '+d.k+' '+d.n);toast('Details updated')}
+ else{S.staff.push(Object.assign({id:'U'+Date.now(),st:'Active'},d));aud('Added '+d.k+': '+d.n);toast('Added. An invitation email lets '+d.n+' set a password.')}
+ closeM();go()}
+function stTog(id){const p=S.staff.find(x=>x.id===id);p.st=p.st==='Active'?'Suspended':'Active';aud(p.st+': '+p.n);toast(p.n+' is now '+p.st);go()}
+function stDel(id){const p=S.staff.find(x=>x.id===id),bs=S.batches.filter(b=>b[2]===p.n).map(b=>b[0]);if(bs.length){toast('Reassign batch '+bs.join(', ')+' before removing '+p.n);return}
+ modal(`<h3>Remove ${esc(p.n)}?</h3><p class="note" style="margin-bottom:14px">Their access ends. Past classes, interviews and records are kept.</p><div class="row"><button class="btn bad" onclick="stDel2('${id}')">Remove</button><button class="btn o" onclick="closeM()">Cancel</button></div>`)}
+function stDel2(id){const p=S.staff.find(x=>x.id===id);S.staff=S.staff.filter(x=>x.id!==id);aud('Removed '+p.n);closeM();toast(p.n+' removed');go()}
+function staffTbl(tab){const L=S.staff.filter(x=>tab==='tech'?x.k==='Technical Team':x.k!=='Technical Team'),t=tab==='tech'?'Technical team':'Pastors & instructors';
+ return `<div class="card"><div class="ch"><h3 style="margin:0">${t}</h3>${sb('+ Add '+(tab==='tech'?'member':'pastor / instructor'),`staffModal('','${tab}')`,'g')}</div>${table(['Name','Contact','Role','Church','Batches','Status','Manage'],L.map(p=>['<b>'+esc(p.n)+'</b>',esc(p.e)+'<br><small>'+esc(p.m)+'</small>',p.k,esc(p.c),S.batches.filter(b=>b[2]===p.n).map(b=>b[0]).join(', ')||'—',badge(p.st),acts([sb('Edit',`staffModal('${p.id}','${tab}')`,'o'),sb(p.st==='Active'?'Suspend':'Activate',`stTog('${p.id}')`,'o'),sb('Remove',`stDel('${p.id}')`,'o')])]))}<p class="note">New members get an email invitation. Suspended accounts cannot sign in but keep their history.</p></div>`}
+/* ---- students ---- */
+function stuModal(i){const s=i>=0?S.stu[i]:{},bs=S.batches.filter(b=>b[6]!=='Closed').map(b=>b[0]);
+ modal(`<h3>${i>=0?'Edit':'Add'} student</h3><form onsubmit="saveStu(event,${i})">${fld('Full name','n',s.n,'required')}${fld('Email','e',s.e,'type="email" required')}${fld('Mobile','m',s.m||'+91 ')}${sel('Batch','b',bs,s.b)}${i<0?sel('Registration fee','f',['Paid (offline)','Waived','Pending']):''}${FOOT()}</form>`)}
+function saveStu(e,i){e.preventDefault();const f=e.target,d={n:f.n.value.trim(),e:f.e.value.trim(),m:f.m.value,b:f.b.value},bt=S.batches.find(x=>x[0]===d.b),old=i>=0?S.stu[i]:null;
+ if((!old||old.b!==d.b)&&bt[4]>=bt[5]){$('#fe').textContent='Batch '+d.b+' is full. Choose another batch.';return}
+ if(old){if(old.b!==d.b){adjB(old.b,-1);adjB(d.b,1);aud('Transferred '+d.n+' from '+old.b+' to '+d.b+' (history preserved)')}Object.assign(old,d);aud('Updated student '+d.n);toast('Student updated')}
+ else{S.stu.push(Object.assign({p:null,st:'Active'},d));adjB(d.b,1);const fv=f.f.value;S.apps.unshift({id:'A-'+(101+S.apps.length),n:d.n,t:'Student',c:bt[1],s:'Enrolled',fee:fv==='Pending'?'Pending':fv==='Waived'?'Waived':'Paid'});
+  if(fv==='Paid (offline)')S.pay.unshift({ref:'TX-'+(9000+S.pay.length),who:d.n,item:'Registration fee',amt:S.regFee,date:dstr(),mode:'Cash',st:'Paid'});aud('Enrolled student '+d.n+' in '+d.b);toast(d.n+' added to '+d.b)}
+ closeM();go()}
+function stuTog(i){const s=S.stu[i];s.st=s.st==='Active'?'Suspended':'Active';aud(s.st+' student '+s.n);toast(s.n+' is now '+s.st);go()}
+function stuDel(i){const s=S.stu[i];modal(`<h3>Remove ${esc(s.n)}?</h3><p class="note" style="margin-bottom:14px">The student leaves the batch. Attendance, payments and results stay on record.</p><div class="row"><button class="btn bad" onclick="stuDel2(${i})">Remove</button><button class="btn o" onclick="closeM()">Cancel</button></div>`)}
+function stuDel2(i){const s=S.stu[i];adjB(s.b,-1);S.stu.splice(i,1);aud('Removed student '+s.n);closeM();toast(s.n+' removed');go()}
+/* ---- batches ---- */
+function batchModal(i){const b=i>=0?S.batches[i]:[],ins=S.staff.filter(x=>/Instructor/.test(x.k)&&x.st==='Active').map(x=>x.n),r=RULES.find(x=>x.b===b[0])||{w:[],s:'19:00',d:60,t:''};
+ modal(`<h3>${i>=0?'Edit':'New'} batch</h3><form onsubmit="saveBatch(event,${i})">${fld('Batch ID','id',b[0],i>=0?'readonly required':'required placeholder="e.g. BF-02"')}${sel('Course','c',S.courses.map(c=>c[0]),b[1])}${sel('Instructor','i',ins,b[2])}${fld('Capacity','cap',b[5]||25,'type="number" min="1" required')}${sel('Status','st',['Active','Closed'],b[6])}${fld('Session title','t',r.t,'placeholder="Weekly class topic"')}<div class="full"><small class="note">Weekly class days</small><div class="row">${DN.map((d,k)=>`<label class="sw"><input type="checkbox" name="w${k}" ${r.w.includes(k)?'checked':''}>${d}</label>`).join('')}</div></div>${fld('Start time','s',r.s,'type="time"')}${fld('Duration (min)','d',r.d,'type="number" min="15" step="15"')}${FOOT()}</form>`)}
+function saveBatch(e,i){e.preventDefault();const f=e.target,id=f.id.value.trim().toUpperCase(),w=DN.map((d,k)=>f['w'+k].checked?k:-1).filter(k=>k>=0),cap=+f.cap.value;
+ if(i<0&&S.batches.some(b=>b[0]===id)){$('#fe').textContent='Batch ID already exists.';return}
+ if(i>=0&&cap<S.batches[i][4]){$('#fe').textContent='Capacity is below the '+S.batches[i][4]+' students already enrolled.';return}
+ const tt=w.length?w.map(k=>DN[k]).join(' & ')+' '+tfmt(f.s.value):'Not scheduled',row=[id,f.c.value,f.i.value,tt,i>=0?S.batches[i][4]:0,cap,f.st.value];
+ if(i>=0)S.batches[i]=row;else S.batches.push(row);INS[id]=row[2];
+ const ri=RULES.findIndex(r=>r.b===id),old=ri>=0?RULES[ri]:null;if(ri>=0)RULES.splice(ri,1);
+ if(w.length)RULES.push({b:id,t:f.t.value||(old&&old.t)||row[1],w,s:f.s.value,d:+f.d.value||60});
+ aud((i>=0?'Updated':'Created')+' batch '+id);closeM();toast('Batch '+id+' saved. Sessions appear in the calendar.');go()}
+function xferModal(id){const L=S.stu.map((s,i)=>[s,i]).filter(x=>x[0].b!==id);modal(`<h3>Assign student to ${id}</h3><form onsubmit="xferSave(event,'${id}')"><label class="full">Student<select name="s">${L.map(x=>`<option value="${x[1]}">${esc(x[0].n)} (now ${x[0].b})</option>`).join('')}</select></label>${FOOT('Assign / transfer')}</form>`)}
+function xferSave(e,id){e.preventDefault();const s=S.stu[+e.target.s.value],bt=S.batches.find(b=>b[0]===id);if(bt[4]>=bt[5]){$('#fe').textContent='Batch is full.';return}
+ adjB(s.b,-1);adjB(id,1);aud('Transferred '+s.n+' from '+s.b+' to '+id+' (history preserved)');s.b=id;closeM();toast(s.n+' moved to '+id);go()}
+function bTog(i){const b=S.batches[i];b[6]=b[6]==='Closed'?'Active':'Closed';aud(b[6]+' batch '+b[0]);toast('Batch '+b[0]+' '+b[6].toLowerCase());go()}
+const _bat=V.batches;
+/* ---- generic course / plan editor ---- */
+function gm(t,key,i,F){const r=i>=0?S[key][i]:[];modal(`<h3>${i>=0?'Edit':'Add'} ${t}</h3><form onsubmit="gs(event,'${key}',${i},${F.length})">${F.map((f,k)=>Array.isArray(f[1])?sel(f[0],'f'+k,f[1],r[k]):fld(f[0],'f'+k,r[k],f[1]==='n'?'type="number" min="0" required':'required')).join('')}${FOOT()}</form>`)}
+function gs(e,key,i,n){e.preventDefault();const f=e.target,r=[];for(let k=0;k<n;k++)r.push(f['f'+k].value);
+ if(key==='courses'&&i>=0){const o=S.courses[i][0];S.batches.forEach(b=>{if(b[1]===o)b[1]=r[0]})}
+ if(i>=0)S[key][i]=r;else S[key].push(r);aud('Saved '+key.slice(0,-1)+' “'+r[0]+'”');closeM();toast('Saved');go()}
+/* ---- payments ---- */
+function payModal(){const w=[...new Set(S.stu.map(s=>s.n).concat(S.apps.map(a=>a.n)))];modal(`<h3>Record payment</h3><form onsubmit="savePay(event)">${sel('Payer','w',w)}${sel('Item','i',['Registration fee','Course fee','Subscription','Installment'])}${fld('Amount (₹)','a',S.regFee,'type="number" min="0" required')}${sel('Mode','m',['Cash','UPI','Card','Bank transfer'])}${sel('Status','s',['Paid','Pending'])}${FOOT('Record')}</form>`)}
+function savePay(e){e.preventDefault();const f=e.target;S.pay.unshift({ref:'TX-'+(9000+S.pay.length),who:f.w.value,item:f.i.value,amt:+f.a.value,date:dstr(),mode:f.m.value,st:f.s.value});aud('Recorded '+fmt(f.a.value)+' from '+f.w.value);closeM();toast('Payment recorded');go()}
+function payStat(i,st){S.pay[i].st=st;aud(S.pay[i].ref+' marked '+st);toast(S.pay[i].ref+' marked '+st);go()}
+function rcpt(i){const p=S.pay[i];modal(`<h3>Receipt ${p.ref}</h3><div class="fee"><div><span>Paid by</span><b>${esc(p.who)}</b></div><div><span>For</span><b>${esc(p.item)}</b></div><div><span>Date</span><b>${p.date}</b></div><div><span>Mode</span><b>${p.mode}</b></div><div class="tot"><span>Amount</span><span>${fmt(p.amt)}</span></div></div><div class="row" style="margin-top:14px"><button class="btn" onclick="window.print()">Print</button><button class="btn o" onclick="closeM()">Close</button></div>`)}
+V.payments=function(){const adm=S.role==='admin',L=S.pay.map((p,i)=>[p,i]).filter(x=>adm||x[0].mine||x[0].who==='Daniel Joseph'),sum=s=>L.filter(x=>x[0].st===s).reduce((a,x)=>a+x[0].amt,0);
+ return (adm?`<div class="grid k" style="margin-bottom:16px">${kpi('Collected',fmt(sum('Paid')))}${kpi('Pending',fmt(sum('Pending')))}${kpi('Refunded',fmt(sum('Refunded')))}${kpi('Transactions',L.length)}</div>`:'')+`<div class="card"><div class="ch"><h3 style="margin:0">${adm?'Payments & transactions':'Registration fee & payments'}</h3>${adm?sb('+ Record payment','payModal()','g'):''}</div>${table(adm?['Ref','Payer','Item','Amount','Date','Mode','Status','Action']:['Ref','Item','Amount','Date','Status','Receipt'],L.map(x=>{const p=x[0],i=x[1],r=sb('Receipt',`rcpt(${i})`,'o');return adm?[p.ref,esc(p.who),esc(p.item),fmt(p.amt),p.date,p.mode,badge(p.st),acts([r].concat(p.st==='Pending'?[sb('Mark paid',`payStat(${i},'Paid')`)]:p.st==='Paid'?[sb('Refund',`payStat(${i},'Refunded')`,'o')]:[]))]:[p.ref,esc(p.item),fmt(p.amt),p.date,badge(p.st),p.st==='Paid'?r:'—']}))}<p class="note">Registration fee, course fee and subscriptions are tracked separately. Paying never approves an applicant who still needs interview approval.</p></div>`};
+/* ---- applications (with fee column and admin control) ---- */
+function appAct(a,adm){let b='';
+ if(a.s==='Final Approval Pending'&&adm)b=sb('Approve',`apprModal('${a.id}')`)+' '+sb('Reject',`setApp('${a.id}','Rejected')`,'o');
+ else if(a.s==='Submitted')b=sb('Schedule interview',`intModal('${a.id}')`);
+ else if(a.s==='Interview Scheduled')b=sb('Mark passed',`setApp('${a.id}','Interview Passed')`)+' '+sb('Fail',`setApp('${a.id}','Interview Failed')`,'o');
+ else if(a.s==='Interview Passed')b=sb('Send to admin',`setApp('${a.id}','Final Approval Pending')`);
+ if(adm)b+=`<select aria-label="Change status" onchange="this.value&&setApp('${a.id}',this.value)"><option value="">Set status…</option>${STAT.map(s=>`<option>${s}</option>`).join('')}</select>`;
+ return b||'—'}
+V.applications=function(){const L=S.f==='All'?S.apps:S.apps.filter(x=>x.s===S.f),adm=S.role==='admin';
+ return `<div class="row" style="margin-bottom:12px;justify-content:space-between"><select aria-label="Filter by status" onchange="S.f=this.value;go()">${['All'].concat(STAT).map(s=>`<option${s===S.f?' selected':''}>${s}</option>`).join('')}</select><button class="btn o" onclick="csv('applications',['ID','Applicant','Type','Program','Fee','Status'],S.apps.map(a=>[a.id,a.n,a.t,a.c,a.fee,a.s]))">Export CSV</button></div><div class="card"><h3>Registration applications</h3>${table(['ID','Applicant','Type','Program','Reg. fee','Status','Action'],L.map(a=>[a.id,'<b>'+esc(a.n)+'</b>',a.t,esc(a.c),badge(a.fee),badge(a.s),appAct(a,adm)]))}</div>`};
+function apprModal(id){const a=S.apps.find(x=>x.id===id),bs=S.batches.filter(b=>b[6]!=='Closed'&&b[4]<b[5]).map(b=>b[0]);
+ modal(`<h3>Approve ${esc(a.n)}</h3><form onsubmit="apprSave(event,'${id}')"><label class="full">Program<input value="${esc(a.c)}" disabled></label>${sel('Assign batch','b',['No batch (individual)'].concat(bs))}${FOOT('Approve & enroll')}</form>`)}
+function apprSave(e,id){e.preventDefault();const a=S.apps.find(x=>x.id===id),b=e.target.b.value;
+ if(a.t==='Student'&&b[0]!=='N'){S.stu.push({n:a.n,b,p:null,e:a.n.toLowerCase().replace(/\s+/g,'.')+'@mail.com',m:'+91 ',st:'Active'});adjB(b,1)}
+ closeM();setApp(id,'Approved')}
+/* ---- registration with fee ---- */
+const RG=()=>S.reg;
+function regType(t){S.reg={step:1,type:t,d:{},pay:'UPI',w:false,res:null};go()}
+function regNext(e){e.preventDefault();const d=Object.fromEntries(new FormData(e.target)),bad=[];
+ if((d.n||'').trim().length<2)bad.push('full name');if(!/^\S+@\S+\.\S+$/.test(d.e||''))bad.push('a valid email');if(!/^\+\d[\d\s-]{7,}$/.test(d.m||''))bad.push('mobile with country code (+91…)');if(RG().type==='Pastor'&&!(d.c||'').trim())bad.push('church or ministry');if(!d.t)bad.push('acceptance of terms');
+ RG().d=d;if(bad.length){$('#fe').textContent='Please check: '+bad.join(', ')+'.';return}RG().step=2;go();scrollTo(0,0)}
+function regWaive(){const c=($('#wc').value||'').trim().toUpperCase();if(c&&c===S.waive.toUpperCase()){RG().w=true;toast('Fee waiver applied')}else toast('That waiver code is not valid');go()}
+function regMode(m){RG().pay=m;go()}
+function regPay(){const g=RG(),fee=g.w?0:S.regFee,id='A-'+(101+S.apps.length),tx='TX-'+(9000+S.pay.length);
+ S.apps.unshift({id,n:g.d.n,t:g.type,c:g.d.p,s:'Submitted',fee:g.w?'Waived':'Paid'});
+ if(fee>0)S.pay.unshift({ref:tx,who:g.d.n,item:'Registration fee',amt:fee,date:dstr(),mode:g.pay,st:'Paid',mine:1});
+ note('Application '+id+' submitted'+(fee>0?'. Registration fee '+fmt(fee)+' received.':'.'));g.res={id,tx,fee,mode:g.w?'Waiver':g.pay};g.step=3;toast('Application submitted');go();scrollTo(0,0)}
+V.register=function(){const g=RG(),st=g.step,d=g.d,ped=g.type==='Pastor',
+ steps=`<div class="steps">${['Your details','Registration fee','Submitted'].map((x,i)=>`<span class="${i+1<st?'d':i+1===st?'c':''}"><b>${i+1<st?'✓':i+1}</b>${x}</span>`).join('')}</div>`;
+ if(st===1){const cs=S.courses.filter(c=>c[5]==='Active'&&(ped?c[1]!=='Student':c[1]!=='Pastor')).map(c=>c[0]);
+  return `<div class="card">${steps}<div class="seg" style="margin-bottom:16px"><button class="${ped?'':'on'}" onclick="regType('Student')">Student</button><button class="${ped?'on':''}" onclick="regType('Pastor')">Pastor</button></div><form onsubmit="regNext(event)" novalidate>${fld('Full name','n',d.n,'autocomplete="name"')}${fld('Email','e',d.e,'type="email"')}${fld('Mobile (with country code)','m',d.m||'+91 ','type="tel"')}${fld('Date of birth','dob',d.dob,'type="date"')}${fld(ped?'Church or ministry':'Church / organization (optional)','c',d.c)}${fld('City / location','a',d.a)}${sel('Program','p',cs,d.p)}${ped?fld('Ministry role','mr',d.mr)+fld('Years of ministry','y',d.y,'type="number" min="0"'):sel('Previous Bible study','x',['None','Less than 1 year','1–3 years','More than 3 years'],d.x)+fld('Emergency contact','ec',d.ec)}${sel('Class format','f',['Batch','Individual'],d.f)}${sel('Preferred language','l',['English','Telugu','Hindi'],d.l)}${fld('Available learning times','at',d.at,'placeholder="e.g. weekday evenings"')}<label class="full"><span class="sw"><input type="checkbox" name="t" ${d.t?'checked':''}> I accept the terms, privacy policy and consent</span></label><span class="err full" id="fe"></span><div class="full"><button class="btn g">Continue to registration fee</button></div></form></div>`}
+ if(st===2){const fee=g.w?0:S.regFee;
+  return `<div class="card">${steps}<h3>Registration fee</h3><div class="fee"><div><span>Applicant</span><b>${esc(d.n)}</b></div><div><span>${g.type} program</span><b>${esc(d.p)}</b></div><div><span>Registration fee</span><b>${fmt(S.regFee)}</b></div>${g.w?'<div><span>Fee waiver</span><b>− '+fmt(S.regFee)+'</b></div>':''}<div class="tot"><span>Total due now</span><span>${fmt(fee)}</span></div></div>
+  <div class="row" style="margin:14px 0"><input id="wc" placeholder="Fee waiver code (if you have one)" style="flex:1;min-width:200px"><button class="btn o" onclick="regWaive()">Apply</button></div>
+  ${fee?`<p class="note" style="margin-bottom:8px">Payment method</p><div class="seg">${['UPI','Card','Net banking'].map(m=>`<button class="${g.pay===m?'on':''}" onclick="regMode('${m}')">${m}</button>`).join('')}</div>`:''}
+  <div class="row" style="margin-top:16px"><button class="btn g" onclick="regPay()">${fee?'Pay '+fmt(fee)+' & submit':'Submit application'}</button><button class="btn o" onclick="RG().step=1;go()">Back</button></div>
+  <p class="note">Course fees are billed only after approval. Paying this fee does not approve your application. Demo payment: a live gateway confirms payments on the server and card details are never stored here.</p></div>`}
+ const r=g.res;return `<div class="card" style="text-align:center">${steps}<div class="ok">✓</div><h3>Application submitted</h3><p class="note" style="margin-bottom:14px">We emailed your confirmation. Next: document review and interview.</p><div class="fee" style="text-align:left;max-width:420px;margin:0 auto"><div><span>Application ID</span><b>${r.id}</b></div><div><span>Registration fee</span><b>${r.fee?fmt(r.fee):'Waived'}</b></div>${r.fee?`<div><span>Receipt</span><b>${r.tx}</b></div>`:''}<div><span>Paid via</span><b>${r.mode}</b></div></div><div class="row" style="justify-content:center;margin-top:16px"><button class="btn g" onclick="nav('status')">Track application</button><button class="btn o" onclick="window.print()">Print receipt</button><button class="btn o" onclick="regType('Student')">New registration</button></div></div>`};
+/* ---- admin views ---- */
+const _crs=V.courses,_plans=V.plans,_set=V.settings,_dash=V.dashboard,_att2=V.attendance;
+Object.assign(V,{
+techteam:()=>staffTbl('tech'),pastors:()=>staffTbl('pastor'),
+students(){const adm=S.role==='admin',L=S.stu.map((s,i)=>[s,i]).filter(x=>adm||pv(x[0].b));
+ return `<div class="card"><div class="ch"><h3 style="margin:0">${adm?'Students':'My students'}</h3>${adm?'<div class="row">'+sb('Export CSV',`csv('students',['Student','Batch','Attendance %','Status'],S.stu.map(s=>[s.n,s.b,s.p===null?'':s.p,s.st]))`,'o')+sb('+ Add student','stuModal(-1)','g')+'</div>':''}</div>${table(['Student','Batch','Attendance','Status'].concat(adm?['Manage']:[]),L.map(x=>{const s=x[0],i=x[1],r=['<b>'+esc(s.n)+'</b><br><small>'+esc(s.e)+'</small>',s.b,s.p===null?'<small>No classes yet</small>':bar(s.p)+'<small>'+s.p+'%</small>',badge(s.st)];if(adm)r.push(acts([sb('Edit',`stuModal(${i})`,'o'),sb(s.st==='Active'?'Suspend':'Activate',`stuTog(${i})`,'o'),sb('Remove',`stuDel(${i})`,'o')]));return r}))}${adm?'':'<p class="note">You only see students in your assigned batches.</p>'}</div>`},
+users(){const f=S.uf,all=S.staff.map(p=>({n:p.n,e:p.e,r:p.k,st:p.st,a:`staffModal('${p.id}','${p.k==='Technical Team'?'tech':'pastor'}')`,t:`stTog('${p.id}')`})).concat(S.stu.map((s,i)=>({n:s.n,e:s.e,r:'Student',st:s.st,a:`stuModal(${i})`,t:`stuTog(${i})`}))),L=f==='All'?all:all.filter(u=>f==='Students'?u.r==='Student':f==='Staff'?u.r!=='Student':u.r===f);
+ return `<div class="card"><div class="ch"><h3 style="margin:0">User management</h3><div class="row">${sb('+ Student','stuModal(-1)','g')}${sb('+ Pastor / Instructor',"staffModal('','pastor')",'g')}${sb('+ Tech member',"staffModal('','tech')",'g')}</div></div><div style="margin-bottom:10px"><select aria-label="Filter users" onchange="S.uf=this.value;go()">${['All','Students','Staff','Technical Team'].map(x=>`<option${x===f?' selected':''}>${x}</option>`).join('')}</select></div>${table(['Name','Email','Role','Status','Manage'],L.map(u=>['<b>'+esc(u.n)+'</b>',esc(u.e),u.r,badge(u.st),acts([sb('Edit',u.a,'o'),sb(u.st==='Active'?'Suspend':'Activate',u.t,'o')])]))}</div>`},
+batches(){if(S.role!=='admin')return _bat();return `<div class="ch"><h3 style="margin:0">Batches</h3>${sb('+ New batch','batchModal(-1)','g')}</div><div class="grid two">${S.batches.map((b,i)=>`<div class="card"><div class="ch" style="margin-bottom:6px"><h3 style="margin:0">${esc(b[1])}</h3>${badge(b[6])}</div><p style="color:var(--mut)">${b[0]} · ${esc(b[2])}<br>${esc(b[3])}</p><div class="prog" style="margin:12px 0 6px"><i style="width:${Math.min(100,b[4]/b[5]*100)}%"></i></div><small style="color:var(--mut)">${b[4]} of ${b[5]} seats filled · ${Math.max(0,b[5]-b[4])} available</small><div class="row" style="margin-top:12px">${sb('Edit',`batchModal(${i})`,'o')}${sb('Assign student',`xferModal('${b[0]}')`,'o')}${sb(b[6]==='Closed'?'Reopen':'Close',`bTog(${i})`,'o')}</div></div>`).join('')}</div>`},
+courses(){if(S.role!=='admin')return _crs();return `<div class="card"><div class="ch"><h3 style="margin:0">Courses & programs</h3>${sb('+ New course',"gm('course','courses',-1,CF)",'g')}</div>${table(['Course','Audience','Duration','Lessons','Fee','Status','Manage'],S.courses.map((c,i)=>['<b>'+esc(c[0])+'</b>',c[1],esc(c[2]),c[3],esc(c[4]),badge(c[5]),sb('Edit',`gm('course','courses',${i},CF)`,'o')]))}<p class="note">Courses are archived, never deleted, so enrollments and certificates stay valid.</p></div>`},
+plans(){return `<div class="card"><div class="ch"><h3 style="margin:0">Subscription plans</h3>${S.role==='admin'?sb('+ New plan',"gm('plan','plans',-1,PF)",'g'):''}</div>${table(['Plan','Audience','Duration','Price','Renewal','Status','Manage'],S.plans.map((p,i)=>[esc(p[0]),p[1],p[2],esc(p[3]),p[4],badge(p[5]),sb('Edit',`gm('plan','plans',${i},PF)`,'o')]))}<p class="note">Subscription statuses: Pending Payment, Active, Expiring Soon, Expired, Cancelled, Suspended, Refunded.</p></div>`},
+settings(){return _set()+(S.role==='admin'?`<div class="card" style="margin-top:16px"><h3>Registration fee</h3><form onsubmit="event.preventDefault();S.regFee=+this.f.value;S.waive=this.w.value||S.waive;aud('Updated registration fee to '+fmt(S.regFee));toast('Registration fee saved');go()"><label>Registration fee (₹)<input name="f" type="number" min="0" value="${S.regFee}"></label><label>Fee waiver code<input name="w" value="${esc(S.waive)}"></label><div class="full"><button class="btn g">Save fee settings</button></div></form></div>`:'')},
+dashboard(){return S.role==='admin'?`<div class="card"><h3>Quick actions</h3><div class="row">${sb('+ Student','stuModal(-1)','g')}${sb('+ Pastor / Instructor',"staffModal('','pastor')",'g')}${sb('+ Technical member',"staffModal('','tech')",'g')}${sb('+ Session','sessModal()')}${sb('+ Batch','batchModal(-1)')}${sb('+ Course',"gm('course','courses',-1,CF)")}</div></div><div style="height:16px"></div>`+_dash():_dash()},
+attendance(){if(S.role!=='admin')return _att2();const L=S.stu.map(s=>[s.n,s.b,s.p]);return `<div class="card"><div class="ch"><h3 style="margin:0">Student attendance report</h3><button class="btn o s" onclick="csv('attendance',['Student','Batch','Attendance %'],S.stu.map(s=>[s.n,s.b,s.p===null?'':s.p]))">Export CSV</button></div>${table(['Student','Batch','Attendance','Flag'],L.map(s=>['<b>'+esc(s[0])+'</b>',s[1],s[2]===null?'<small>No classes yet</small>':bar(s[2])+'<small>'+s[2]+'%</small>',s[2]===null?badge('New'):s[2]<S.thr?badge('Low'):badge('Good')]))}<p class="note">Threshold is ${S.thr}% (change it in Settings). Cancelled classes and approved leave are excluded from the denominator.</p></div>`}});
 
 go();
 </script>
